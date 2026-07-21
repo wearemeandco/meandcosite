@@ -1,0 +1,64 @@
+# ============================================================
+#  Me&Co. — Netlify configuration
+#  Static site, no build step. Functions power the gated
+#  client proposals under /proposals/<slug>.
+# ============================================================
+
+[build]
+  publish = "."
+  functions = "netlify/functions"
+
+[functions]
+  # Ship the proposal HTML alongside the function so it can be read
+  # at request time. These files are NOT part of the static site.
+  included_files = ["netlify/functions/proposal/content/**"]
+
+# ---- Gated proposals -------------------------------------------------
+# Every /proposals/<slug> request is handled by the function, which
+# decides whether to return the lock screen or the proposal itself.
+# force = true so no static file can ever shadow (or leak past) it.
+
+[[redirects]]
+  from = "/proposals/:slug"
+  to = "/.netlify/functions/proposal?slug=:slug"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/proposals/:slug/"
+  to = "/.netlify/functions/proposal?slug=:slug"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/proposals"
+  to = "/"
+  status = 302
+  force = true
+
+# ---- Defense in depth ------------------------------------------------
+# publish = "." means the repo root is the static site. Netlify normally
+# omits the functions directory from the static deploy, but this rule
+# guarantees nothing under /netlify/ is ever fetchable, so the proposal
+# source can't be pulled directly.
+
+[[redirects]]
+  from = "/netlify/*"
+  to = "/"
+  status = 404
+  force = true
+
+[[redirects]]
+  from = "/netlify.toml"
+  to = "/"
+  status = 404
+  force = true
+
+# Gated pages must never be cached by a CDN or shared proxy.
+[[headers]]
+  for = "/proposals/*"
+  [headers.values]
+    Cache-Control = "no-store, private"
+    X-Robots-Tag = "noindex, nofollow, noarchive"
+    Referrer-Policy = "no-referrer"
+    X-Content-Type-Options = "nosniff"
