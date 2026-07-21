@@ -453,8 +453,7 @@
   .btn-back{background:transparent;color:var(--brown);padding-left:8px;}
   .btn-back:hover{color:var(--navy);}
   .btn-back[disabled]{opacity:0;pointer-events:none;}
-  .btn-next.finish{background:var(--blue);}
-  .btn-next.finish:hover{background:var(--blue-dark);}
+  .btn-next[disabled]{opacity:0;pointer-events:none;}
 
   @media (prefers-reduced-motion:reduce){
     .step.is-active{animation:none;}
@@ -611,24 +610,6 @@
       </div>
     </section>
 
-    <!-- STEP 4 — DELIVERABLES -->
-    <section class="step" data-label="Deliverables">
-      <div class="card">
-        <div class="body-pad">
-          <div class="eyebrow">What you receive</div>
-          <h2 style="font-size:clamp(23px,4.6vw,32px);margin:14px 0 8px;">Deliverables</h2>
-          <p class="lead" style="margin-bottom:26px;">Concrete assets you'll hold in hand: built to run with, not just to read.</p>
-          <div class="delivs">
-            <div class="deliv"><div class="mk">A</div><p>Brand &amp; content strategy playbook + 3 content pillars</p></div>
-            <div class="deliv"><div class="mk">B</div><p>90-day content calendar with a weekly cadence</p></div>
-            <div class="deliv"><div class="mk">C</div><p>Short-form video concepts &amp; captions across TikTok, Reels, X &amp; LinkedIn</p></div>
-            <div class="deliv"><div class="mk">D</div><p>Slate Shots campaign calendar: launch → drumbeat → finale</p></div>
-            <div class="deliv"><div class="mk">E</div><p>Monthly performance report with engagement &amp; growth metrics</p></div>
-          </div>
-        </div>
-      </div>
-    </section>
-
     <!-- STEP 5 — TIMELINE -->
     <section class="step" data-label="Timeline">
       <div class="card">
@@ -749,7 +730,8 @@
                 <ul>
                   <li>1 monthly strategy session (60 minutes)</li>
                   <li>1 editorial calendar per month</li>
-                  <li>Up to 20 content captions or content drafts per month</li>
+                  <li>Up to 20 captions per month</li>
+                  <li>Up to 20 graphics per month</li>
                   <li>1 monthly reporting dashboard or written performance summary</li>
                   <li>Light community guidance and recommendations</li>
                   <li>Content direction across up to 3 agreed platforms</li>
@@ -766,7 +748,14 @@
                 </ul>
               </div>
             </div>
-            <div class="notes"><b>Revision &amp; scope notes</b>Up to 2 rounds of revisions on monthly copy deliverables. Additional content volume, extra platforms, or campaign work require a separate add-on or revised scope.</div>
+            <div class="notes">
+              <b>Additional post pricing</b>
+              <ul style="margin:2px 0 0;padding-left:18px;display:grid;gap:6px;list-style:disc;">
+                <li>$250 per post — strategy + copy + light design direction</li>
+                <li>$500 per post — custom strategy, layout/design, revisions, and platform-specific tailoring</li>
+                <li>$500+ per post — more complex creative direction, multiple versions, or a higher-stakes brand/launch piece</li>
+              </ul>
+            </div>
           </div>
 
           <div class="tier">
@@ -811,7 +800,7 @@
 
         <div class="close">
           <p>Ready when you are. The next step is a kickoff session, followed by your roadmap and first content calendar within two weeks.</p>
-          <a href="mailto:melody@weareme.co?subject=Slate%20%C3%97%20Me%26Co.%3A%20Let's%20start" class="cta">Start the pilot</a>
+          <a href="mailto:melody@weareme.co?subject=Slate%20%C3%97%20Me%26Co.%3A%20Let's%20start&body=Hey%20Melody%2C%0A%0AI%20am%20interested%20in%20moving%20forward%20with%20%5Benter%20your%20option%20here%5D.%0A%0AThank%20you!" class="cta">Start the pilot</a>
           <div class="contact">Me&amp;Co. · melody@weareme.co</div>
         </div>
       </div>
@@ -867,13 +856,8 @@
     stepTitle.textContent = steps[i].getAttribute('data-label');
 
     back.disabled = (i===0);
-    if(i===total-1){
-      next.textContent = 'Get the roadmap →';
-      next.classList.add('finish');
-    } else {
-      next.textContent = 'Next →';
-      next.classList.remove('finish');
-    }
+    next.disabled = (i===total-1);
+    next.textContent = 'Next →';
 
     if(!skipScroll){
       window.scrollTo({top:0, behavior:'smooth'});
@@ -881,11 +865,7 @@
   }
 
   next.addEventListener('click', function(){
-    if(i===total-1){
-      var link = document.querySelector('.cta');
-      if(link) link.click();
-      return;
-    }
+    if(i===total-1) return;
     go(i+1);
   });
   back.addEventListener('click', function(){ go(i-1); });
