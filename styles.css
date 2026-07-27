@@ -112,7 +112,7 @@ button { -webkit-tap-highlight-color: transparent; }
   justify-content: space-between;
   gap: 24px;
 }
-.site-nav .logo img { height: 62px; display: block; }
+.site-nav .logo img { height: 90px; display: block; }
 .nav-end { display: flex; align-items: center; gap: 16px; }
 .site-nav .links {
   display: flex;
