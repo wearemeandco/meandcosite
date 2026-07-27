@@ -411,6 +411,27 @@ h1, h2, h3, .font-serif { font-family: var(--serif); }
 
 .hero-fill { position: relative; overflow: hidden; height: 100vh; }
 
+.client-logo-strip {
+  overflow: hidden;
+  width: 100%;
+  background: #FFFCF5;
+  -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 64px, #000 calc(100% - 64px), transparent 100%);
+  mask-image: linear-gradient(90deg, transparent 0, #000 64px, #000 calc(100% - 64px), transparent 100%);
+}
+.logo-marquee-track { display: flex; align-items: center; width: max-content; gap: clamp(36px, 5vw, 64px); position: relative; animation: logoMarquee 28s linear infinite; }
+.client-logo-strip:hover .logo-marquee-track { animation-play-state: paused; }
+.client-logo-strip img { height: 59px; max-width: 210px; width: auto; object-fit: contain; flex: none; mix-blend-mode: multiply; }
+@keyframes logoMarquee { from { left: 0; } to { left: -50%; } }
+
+.blog-body p { margin: 0 0 18px 0; font-size: 17px; line-height: 1.78; color: #3A3630; }
+.blog-body p:last-child { margin-bottom: 0; }
+.blog-body h2 { font-family: var(--serif); font-weight: 600; font-size: clamp(21px, 2.6vw, 27px); color: #2A4FBF; margin: 40px 0 14px 0; line-height: 1.28; }
+.blog-body h2:first-child { margin-top: 0; }
+.blog-body ul, .blog-body ol { margin: 0 0 18px 0; padding-left: 22px; }
+.blog-body li { font-size: 17px; line-height: 1.72; color: #3A3630; margin-bottom: 8px; }
+.blog-body a { color: var(--blue); text-decoration: underline; text-underline-offset: 3px; }
+.blog-body a:hover { color: var(--blue-deep); }
+
 .hero-services { position: relative; overflow: hidden; }
 .hero-blob { position: absolute; border-radius: 50%; pointer-events: none; filter: blur(72px); animation: floatBlob 16s ease-in-out infinite; z-index: 0; }
 .hero-services .wrap { position: relative; z-index: 1; }
