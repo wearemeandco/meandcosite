@@ -418,10 +418,11 @@ h1, h2, h3, .font-serif { font-family: var(--serif); }
   -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 64px, #000 calc(100% - 64px), transparent 100%);
   mask-image: linear-gradient(90deg, transparent 0, #000 64px, #000 calc(100% - 64px), transparent 100%);
 }
-.logo-marquee-track { display: flex; align-items: center; width: max-content; gap: clamp(36px, 5vw, 64px); position: relative; animation: logoMarquee 28s linear infinite; }
+.logo-marquee-track { display: flex; align-items: center; width: max-content; gap: clamp(36px, 5vw, 64px); animation: logoMarquee 34s linear infinite; }
 .client-logo-strip:hover .logo-marquee-track { animation-play-state: paused; }
+.logo-frame { display: inline-flex; align-items: center; justify-content: center; background: #FFFCF5; flex: none; }
 .client-logo-strip img { height: 59px; max-width: 210px; width: auto; object-fit: contain; flex: none; mix-blend-mode: multiply; }
-@keyframes logoMarquee { from { left: 0; } to { left: -50%; } }
+@keyframes logoMarquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
 
 .blog-body p { margin: 0 0 18px 0; font-size: 17px; line-height: 1.78; color: #3A3630; }
 .blog-body p:last-child { margin-bottom: 0; }
