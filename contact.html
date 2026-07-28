@@ -44,7 +44,7 @@
       <a href="about.html" class="nav-link">About</a>
       <a href="services.html" class="nav-link">Services</a>
       <a href="work.html" class="nav-link">Our Work</a>
-      <!-- HIDDEN: <a href="blog.html" class="nav-link">Blog</a> -->
+      <a href="blog.html" class="nav-link">Blog</a>
       <a href="contact.html" class="nav-cta">Start a Conversation</a>
     </div>
     <button class="nav-toggle" aria-label="Open menu">
@@ -60,7 +60,7 @@
   <a href="about.html">About</a>
   <a href="services.html">Services</a>
   <a href="work.html">Our Work</a>
-  <!-- HIDDEN: <a href="blog.html">Blog</a> -->
+  <a href="blog.html">Blog</a>
   <a href="contact.html" class="nav-cta">Start a Conversation</a>
 </div>
 
@@ -90,7 +90,9 @@
     </div>
 
     <div style="flex: 1.15 1 420px; min-width: 300px; background: #FFFCF5; border-radius: 22px; padding: clamp(28px, 4vw, 40px); box-shadow: 0 30px 60px -36px rgba(34,49,94,0.25);">
-      <form id="contact-form" style="display: flex; flex-direction: column; gap: 20px;">
+      <form id="contact-form" name="contact" method="POST" data-netlify="true" netlify-honeypot="company" style="display: flex; flex-direction: column; gap: 20px;">
+        <input type="hidden" name="form-name" value="contact">
+        <p style="display: none;"><label>Don't fill this out if you're human: <input name="company"></label></p>
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 20px;">
           <div class="field">
             <label for="name">Name</label>
@@ -130,7 +132,7 @@
     <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 28px; flex-wrap: wrap;">
       <div style="display: flex; flex-direction: column; gap: 12px;">
         <img src="assets/logo-cream-primary.png" alt="Me&amp;Co." style="width: 110px; display: block;">
-        <div style="font-size: 11px; letter-spacing: 0.24em; text-transform: uppercase; color: #8FA3D4;">Marketing, made manageable.</div>
+        <div style="font-size: 11px; letter-spacing: 0.24em; text-transform: uppercase; color: #8FA3D4;">Systems, not just services.</div>
       </div>
       <div style="display: flex; gap: clamp(24px, 4vw, 48px); flex-wrap: wrap;">
         <div style="display: flex; flex-direction: column; gap: 10px;">
@@ -140,7 +142,7 @@
           <a href="work.html" class="foot-link">Our Work</a>
         </div>
         <div style="display: flex; flex-direction: column; gap: 10px;">
-          <!-- HIDDEN: <a href="blog.html" class="foot-link">Blog</a> -->
+          <a href="blog.html" class="foot-link">Blog</a>
           <a href="contact.html" class="foot-link">Contact</a>
           <a href="mailto:melody@weareme.co" class="foot-link">melody@weareme.co</a>
         </div>
@@ -187,11 +189,27 @@
     document.getElementById('contact-form').appendChild(hidden);
   })();
 
+  function encodeForm(form) {
+    var data = new FormData(form);
+    var pairs = [];
+    data.forEach(function (value, key) {
+      pairs.push(encodeURIComponent(key) + '=' + encodeURIComponent(value));
+    });
+    return pairs.join('&');
+  }
+
   document.getElementById('contact-form').addEventListener('submit', function (e) {
     e.preventDefault();
-    try { sessionStorage.removeItem('meco_cart'); } catch (e2) {}
-    this.style.display = 'none';
-    document.getElementById('contact-thanks').style.display = 'block';
+    var form = this;
+    fetch('/', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: encodeForm(form)
+    }).finally(function () {
+      try { sessionStorage.removeItem('meco_cart'); } catch (e2) {}
+      form.style.display = 'none';
+      document.getElementById('contact-thanks').style.display = 'block';
+    });
   });
 </script>
 </body>
