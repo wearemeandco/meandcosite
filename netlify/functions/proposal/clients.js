@@ -24,6 +24,15 @@ const CLIENTS = {
     kicker: 'Private proposal',
     blurb: 'This proposal was prepared just for you. Enter the password Melody sent along with the link.',
   },
+  'core-community-305': {
+    // -> reads process.env.PROPOSAL_PASSWORD_CORE305
+    envKey: 'PROPOSAL_PASSWORD_CORE305',
+    file: 'core-community-305.html',
+    // Shown on the lock screen only. Safe to be public.
+    name: 'Patrick Elias & CORE Community 305',
+    kicker: 'Private proposal',
+    blurb: 'This proposal was prepared just for you. Enter the password Melody sent along with the link.',
+  },
 };
 
 /** Env var naming convention: PROPOSAL_PASSWORD_<CLIENT>. */

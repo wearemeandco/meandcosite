@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Me&Co. · Proposal for Patrick Elias &amp; CORE Community 305</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#EFE8DC;
+    --card:#FFFCF5;
+    --blue:#2A4FBF;
+    --blue-dark:#1E3A94;
+    --navy:#22315E;
+    --navy-deep:#172654;
+    --brown:#7B4A2E;
+    --ink:#3A3630;
+    --body:#5A544A;
+    --soft-blue:#D6E1F3;
+    --mid-blue:#8FA3D4;
+    --panel:#F3ECDF;
+    --panel-2:#E6DCD0;
+    --coral:#E4572E;
+    --sage:#6FAFA0;
+    --rose:#D9A5A0;
+    --shadow:0 24px 60px -30px rgba(42,47,79,.35);
+    --shadow-sm:0 10px 30px -18px rgba(42,47,79,.4);
+  }
+
+  *{margin:0;padding:0;box-sizing:border-box}
+  html,body{background:var(--bg);color:var(--ink);}
+  body{
+    font-family:'DM Sans',Helvetica,Arial,sans-serif;
+    -webkit-font-smoothing:antialiased;
+    min-height:100vh;
+    line-height:1.55;
+  }
+  a{color:var(--blue);text-decoration:none}
+
+  /* ---------- Shell ---------- */
+  .shell{
+    max-width:820px;
+    margin:0 auto;
+    padding:26px 16px 40px;
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+  }
+
+  /* ---------- Top rail ---------- */
+  .rail{position:sticky;top:0;z-index:20;background:var(--bg);padding-bottom:12px;}
+  .rail-head{
+    display:flex;justify-content:space-between;align-items:center;
+    gap:10px;padding:6px 6px 12px;flex-wrap:wrap;
+  }
+  .wordmark{
+    font-family:'Fraunces',Georgia,serif;font-weight:600;font-size:20px;
+    color:var(--navy);letter-spacing:-.01em;
+  }
+  .wordmark span{color:var(--blue)}
+  .wordmark-logo{display:block;height:clamp(26px,8vw,70px);width:auto;}
+  .rail-meta{
+    font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;
+    color:var(--brown);font-weight:600;
+  }
+
+  .progress-wrap{display:flex;align-items:center;gap:14px;padding:0 4px;}
+  .progress-track{
+    position:relative;flex:1;height:6px;border-radius:999px;
+    background:var(--panel-2);overflow:hidden;
+  }
+  .progress-fill{
+    position:absolute;inset:0 auto 0 0;height:100%;border-radius:999px;
+    background:linear-gradient(90deg,var(--blue),var(--mid-blue));
+    width:0%;transition:width .5s cubic-bezier(.4,0,.1,1);
+  }
+  .progress-count{
+    font-size:11px;letter-spacing:.12em;text-transform:uppercase;
+    color:var(--brown);font-weight:700;white-space:nowrap;
+    font-variant-numeric:tabular-nums;
+  }
+
+  .ticks{
+    display:flex;gap:6px;padding:12px 4px 2px;flex-wrap:wrap;
+  }
+  .tick{
+    appearance:none;border:none;cursor:pointer;background:transparent;
+    font-family:inherit;font-size:10.5px;letter-spacing:.06em;
+    text-transform:uppercase;font-weight:600;color:#9A8F7E;
+    padding:5px 10px;border-radius:999px;transition:all .25s ease;
+    display:flex;align-items:center;gap:6px;
+  }
+  .tick .dot{width:6px;height:6px;border-radius:50%;background:var(--panel-2);transition:background .25s ease}
+  .tick:hover{color:var(--brown)}
+  .tick.done .dot{background:var(--sage)}
+  .tick.active{background:var(--navy);color:var(--card)}
+  .tick.active .dot{background:var(--soft-blue)}
+
+  .step-title{
+    display:none;font-family:'Fraunces',Georgia,serif;font-weight:600;
+    font-size:15px;color:var(--navy);padding:12px 4px 2px;
+  }
+
+  @media(max-width:560px){
+    .rail-head{flex-direction:column;align-items:flex-start;gap:6px;padding:4px 6px 12px;}
+    .wordmark-logo{height:clamp(34px,13vw,58px);}
+    .rail-meta{font-size:9.5px;}
+    .ticks{display:none;}
+    .step-title{display:block;}
+  }
+
+  /* ---------- Deck ---------- */
+  .deck{flex:1;display:flex;flex-direction:column;margin-top:14px;}
+
+  .step{display:none;}
+  .step.is-active{display:block;animation:rise .55s cubic-bezier(.2,.7,.2,1);}
+  @keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+
+  .card{
+    background:var(--card);border-radius:20px;overflow:hidden;
+    box-shadow:var(--shadow);
+  }
+
+  .eyebrow{
+    font-size:11px;letter-spacing:.2em;text-transform:uppercase;
+    color:var(--brown);font-weight:700;
+  }
+  .eyebrow.on-dark{color:var(--mid-blue)}
+
+  .body-pad{padding:clamp(26px,5.5vw,48px) clamp(22px,5.5vw,48px);}
+
+  h1,h2,h3{font-family:'Fraunces',Georgia,serif;font-weight:600;color:var(--navy);text-wrap:balance;line-height:1.12;}
+  .lead{color:var(--body);font-size:16.5px;line-height:1.65;}
+  .lead strong{color:var(--ink);font-weight:600;}
+
+  .divider{height:1px;background:var(--panel-2);margin:28px 0;}
+
+  /* ---------- Cover (step 0) ---------- */
+  .cover-top{
+    background:var(--blue);
+    padding:clamp(30px,7vw,54px) clamp(24px,6vw,52px) clamp(26px,6vw,46px);
+    color:var(--card);position:relative;overflow:hidden;
+  }
+  .cover-top::after{
+    content:"";position:absolute;right:-90px;top:-90px;width:260px;height:260px;
+    border-radius:50%;background:radial-gradient(circle at center,rgba(255,252,245,.14),transparent 68%);
+  }
+  .cover-kicker{
+    font-size:11px;letter-spacing:.24em;text-transform:uppercase;
+    color:var(--soft-blue);font-weight:600;margin-bottom:18px;
+  }
+  .cover-title{
+    font-family:'Fraunces',Georgia,serif;font-weight:600;
+    font-size:clamp(30px,7.4vw,52px);line-height:1.06;color:var(--card);
+    text-wrap:balance;max-width:15ch;
+  }
+  .cover-sub{
+    margin-top:16px;font-size:15.5px;color:var(--soft-blue);max-width:46ch;line-height:1.6;
+  }
+  .cover-foot{
+    display:flex;gap:26px;flex-wrap:wrap;padding:22px clamp(24px,6vw,52px);
+    background:var(--navy-deep);color:var(--soft-blue);
+  }
+  .cover-foot .fl{display:flex;flex-direction:column;gap:3px;}
+  .cover-foot .k{font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--mid-blue);}
+  .cover-foot .v{font-size:14px;color:var(--card);font-weight:500;}
+
+  /* ---------- Snapshot / checklist table ---------- */
+  .snap{display:flex;flex-direction:column;gap:0;margin-top:6px;border-radius:14px;overflow:hidden;border:1px solid var(--panel-2);}
+  .snap-row{
+    display:grid;grid-template-columns:1.1fr 1fr 1.5fr;gap:14px;
+    padding:14px 18px;align-items:center;
+  }
+  .snap-row:not(:last-child){border-bottom:1px solid var(--panel-2);}
+  .snap-row.head{background:var(--panel);}
+  .snap-row.head span{font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--brown);font-weight:700;}
+  .snap-ch{font-weight:600;color:var(--ink);display:flex;align-items:center;gap:9px;}
+  .snap-ch .pip{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+  .snap-aud{font-variant-numeric:tabular-nums;color:var(--body);font-weight:500;}
+  .snap-note{color:var(--body);font-size:14px;}
+  @media(max-width:560px){
+    .snap-row{grid-template-columns:1fr;gap:4px;padding:14px 16px;}
+    .snap-row.head{display:none;}
+    .snap-aud{font-size:13px;color:var(--brown);}
+  }
+
+  /* ---------- Bullet lists ---------- */
+  .list{display:grid;gap:14px;margin-top:6px;}
+  .li{display:flex;gap:13px;align-items:baseline;}
+  .li .pip{width:8px;height:8px;border-radius:50%;flex-shrink:0;position:relative;top:1px;}
+  .li p{font-size:15.5px;line-height:1.55;color:var(--body);}
+  .li p b{color:var(--ink);font-weight:600;}
+
+  /* ---------- Objective / goal cards ---------- */
+  .goals{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:8px;}
+  .goal{
+    background:var(--panel);border-radius:14px;padding:20px 18px;
+    border:1px solid var(--panel-2);
+  }
+  .goal .num{font-family:'Fraunces',serif;font-size:26px;color:var(--blue);font-weight:600;line-height:1;}
+  .goal h3{font-size:17px;margin:12px 0 7px;color:var(--navy);}
+  .goal p{font-size:14px;color:var(--body);line-height:1.5;}
+  @media(max-width:680px){.goals{grid-template-columns:1fr;}}
+
+  /* ---------- Scope panels ---------- */
+  .scope{display:grid;gap:14px;margin-top:6px;}
+  .scope-item{
+    background:var(--panel);border-radius:14px;padding:20px 22px;border:1px solid var(--panel-2);
+    display:grid;grid-template-columns:auto 1fr;gap:18px;align-items:start;
+  }
+  .scope-tag{
+    font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;font-weight:700;
+    color:var(--card);background:var(--blue);padding:6px 11px;border-radius:999px;white-space:nowrap;
+    margin-top:2px;
+  }
+  .scope-tag.b{background:var(--brown)}
+  .scope-tag.c{background:var(--sage)}
+  .scope-item h3{font-size:16.5px;color:var(--navy);margin-bottom:6px;}
+  .scope-item p{font-size:14.5px;color:var(--body);line-height:1.55;}
+  .scope-item p em{color:var(--brown);font-style:normal;font-weight:600;}
+  @media(max-width:560px){.scope-item{grid-template-columns:1fr;gap:11px;}}
+
+  /* ---------- Timeline ---------- */
+  .timeline{position:relative;margin-top:10px;padding-left:26px;}
+  .timeline::before{content:"";position:absolute;left:7px;top:8px;bottom:8px;width:2px;background:var(--panel-2);}
+  .phase{position:relative;padding:0 0 26px;}
+  .phase:last-child{padding-bottom:0;}
+  .phase::before{
+    content:"";position:absolute;left:-26px;top:3px;width:16px;height:16px;border-radius:50%;
+    background:var(--card);border:3px solid var(--blue);
+  }
+  .phase.mid::before{border-color:var(--brown);}
+  .phase.end::before{border-color:var(--sage);}
+  .phase .wk{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--brown);font-weight:700;}
+  .phase h3{font-size:17px;color:var(--navy);margin:5px 0 7px;}
+  .phase p{font-size:14.5px;color:var(--body);line-height:1.55;}
+
+  /* ---------- Fit / approach ---------- */
+  .fit-quote{
+    font-family:'Fraunces',serif;font-weight:500;font-size:clamp(21px,4vw,27px);
+    line-height:1.35;color:var(--navy);text-wrap:pretty;margin-bottom:26px;
+  }
+  .fit-quote em{color:var(--blue);font-style:italic;}
+  .fit-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:6px;}
+  .fit-card{background:var(--panel);border:1px solid var(--panel-2);border-radius:14px;padding:20px;}
+  .fit-card h3{font-size:16px;color:var(--navy);margin-bottom:7px;display:flex;align-items:center;gap:9px;}
+  .fit-card h3 .pip{width:8px;height:8px;border-radius:50%;}
+  .fit-card p{font-size:14px;color:var(--body);line-height:1.55;}
+  @media(max-width:560px){.fit-grid{grid-template-columns:1fr;}}
+
+  /* ---------- Pricing (final) ---------- */
+  .price-hero{
+    background:var(--navy-deep);color:var(--card);
+    padding:clamp(28px,6vw,46px) clamp(24px,6vw,48px) clamp(24px,5vw,38px);
+    position:relative;overflow:hidden;
+  }
+  .price-hero::after{
+    content:"";position:absolute;left:-70px;bottom:-90px;width:240px;height:240px;border-radius:50%;
+    background:radial-gradient(circle,rgba(143,163,212,.22),transparent 70%);
+  }
+  .inv-logo{
+    position:relative;display:block;height:clamp(40px,6.5vw,56px);width:auto;
+    margin-bottom:24px;
+  }
+  .price-hero h2{color:var(--card);font-size:clamp(24px,5vw,34px);position:relative;}
+  .price-hero p{color:var(--soft-blue);margin-top:12px;font-size:15px;max-width:52ch;line-height:1.6;position:relative;}
+
+  .tiers-intro{padding:clamp(24px,5vw,40px) clamp(22px,5.5vw,48px) 4px;}
+  .tiers-intro p{font-size:15px;color:var(--body);line-height:1.6;}
+
+  .tiers{
+    display:grid;grid-template-columns:1fr;gap:14px;
+    padding:20px clamp(22px,5.5vw,48px) clamp(28px,5vw,44px);
+  }
+  .tier{
+    border:1px solid var(--panel-2);border-radius:16px;padding:26px 26px;
+    background:var(--panel);position:relative;
+  }
+  .tier-price{
+    display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;
+    margin-top:10px;padding-top:14px;border-top:1px solid var(--panel-2);
+  }
+  .tier-price .amt{
+    font-family:'Fraunces',serif;font-weight:600;
+    font-size:clamp(26px,3.4vw,34px);line-height:1;color:var(--navy);
+    letter-spacing:-.01em;
+  }
+  .tier-price .per{
+    font-size:12px;font-weight:700;
+    letter-spacing:.12em;text-transform:uppercase;color:var(--brown);
+  }
+  .tier .opt{font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--brown);font-weight:700;}
+  .tier h3{font-family:'Fraunces',serif;font-size:20px;color:var(--navy);margin:8px 0 6px;line-height:1.15;}
+  .tier .who{font-size:13px;color:var(--body);line-height:1.5;}
+
+  .tier-cols{
+    display:grid;grid-template-columns:1fr 1fr;gap:4px clamp(20px,4vw,32px);
+    margin-top:20px;
+  }
+  .tier-col.excl{border-left:1px solid var(--panel-2);padding-left:clamp(20px,4vw,32px);}
+  .tier-col .sublabel{
+    font-size:10px;letter-spacing:.12em;text-transform:uppercase;
+    color:var(--brown);font-weight:700;margin-bottom:11px;
+  }
+  .tier-col.excl .sublabel{color:#9A8F7E;}
+  .tier ul{list-style:none;margin:0;display:grid;gap:10px;}
+  .tier li{display:flex;gap:9px;font-size:13px;color:var(--ink);line-height:1.4;align-items:flex-start;}
+  .tier li::before{
+    content:"";flex-shrink:0;width:15px;height:15px;border-radius:50%;
+    margin-top:1px;background-repeat:no-repeat;background-position:center;background-size:8px 8px;
+    background-color:var(--sage);
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M3 8.5l3 3 7-7' stroke='white' stroke-width='2' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  }
+  .tier-col.excl li{color:var(--body);}
+  .tier-col.excl li::before{
+    background-color:var(--panel-2);
+    background-size:7px 7px;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M4 4l8 8M12 4l-8 8' stroke='%237B4A2E' stroke-width='1.6' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  }
+  @media(max-width:560px){
+    .tier-cols{grid-template-columns:1fr;gap:20px;}
+    .tier-col.excl{border-left:0;padding-left:0;padding-top:16px;border-top:1px solid var(--panel-2);}
+  }
+  .tier .notes{margin-top:18px;padding-top:14px;border-top:1px dashed var(--panel-2);font-size:12.5px;color:var(--body);line-height:1.55;}
+  .tier .notes b{display:block;font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--brown);font-weight:700;margin-bottom:5px;}
+  .tier .notes a{font-weight:700;}
+  .after{
+    padding:clamp(26px,5vw,44px) clamp(22px,5.5vw,48px) clamp(20px,4vw,32px);
+  }
+  .after h3{font-size:clamp(20px,3.4vw,26px);margin:12px 0 14px;color:var(--navy);}
+  .after p{font-size:15.5px;line-height:1.65;color:var(--body);max-width:58ch;}
+  .after-note{
+    margin-top:16px;padding-top:16px;border-top:1px solid var(--panel-2);
+    font-size:13.5px;color:var(--brown);font-weight:600;
+  }
+  .close{
+    padding:8px clamp(22px,5.5vw,48px) clamp(30px,5vw,44px);
+  }
+  .close p{font-size:14.5px;color:var(--body);max-width:54ch;margin:0 0 20px;line-height:1.6;}
+  .cta{
+    display:inline-block;background:var(--blue);color:var(--card);font-size:14px;font-weight:700;
+    letter-spacing:.12em;text-transform:uppercase;padding:15px 34px;border-radius:999px;
+    transition:background .2s ease;
+  }
+  .cta:hover{background:var(--blue-dark);color:var(--card);}
+  .contact{margin-top:18px;font-size:12.5px;color:var(--brown);letter-spacing:.06em;}
+
+  /* ---------- Nav footer ---------- */
+  .nav{
+    display:flex;justify-content:space-between;align-items:center;gap:14px;
+    margin-top:20px;padding:0 4px;
+  }
+  .btn{
+    appearance:none;font-family:inherit;cursor:pointer;border:none;
+    font-size:12.5px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;
+    padding:13px 26px;border-radius:999px;transition:all .2s ease;
+  }
+  .btn-next{background:var(--navy);color:var(--card);}
+  .btn-next:hover{background:var(--navy-deep);}
+  .btn-back{background:transparent;color:var(--brown);padding-left:8px;}
+  .btn-back:hover{color:var(--navy);}
+  .btn-back[disabled]{opacity:0;pointer-events:none;}
+  .btn-next[disabled]{opacity:0;pointer-events:none;}
+
+  @media (prefers-reduced-motion:reduce){
+    .step.is-active{animation:none;}
+    .progress-fill{transition:none;}
+  }
+  :focus-visible{outline:3px solid var(--mid-blue);outline-offset:3px;border-radius:6px;}
+</style>
+</head>
+<body>
+<div class="shell">
+
+  <!-- ============ TOP RAIL ============ -->
+  <div class="rail">
+    <div class="rail-head">
+      <img src="/assets/logo-blue.png" alt="Me&amp;Co." class="wordmark-logo">
+      <div class="rail-meta">Proposal · August 2026</div>
+    </div>
+    <div class="progress-wrap">
+      <div class="progress-track"><div class="progress-fill" id="fill"></div></div>
+      <div class="progress-count" id="count">01 / 08</div>
+    </div>
+    <div class="step-title" id="stepTitle"></div>
+    <div class="ticks" id="ticks"></div>
+  </div>
+
+  <!-- ============ DECK ============ -->
+  <div class="deck" id="deck">
+
+    <!-- STEP 0 — COVER -->
+    <section class="step is-active" data-label="Cover">
+      <div class="card">
+        <div class="cover-top">
+          <div class="cover-kicker">Website Design &amp; Newsletter Launch</div>
+          <h1 class="cover-title">Building the digital home for CORE Community 305</h1>
+          <p class="cover-sub">A new website that represents you well, and a weekly newsletter that keeps your community close, without adding another job to your plate.</p>
+        </div>
+        <div class="cover-foot">
+          <div class="fl"><span class="k">Prepared for</span><span class="v">Patrick Elias · CORE Community 305</span></div>
+          <div class="fl"><span class="k">Prepared by</span><span class="v">Melody Estrada, Me&amp;Co.</span></div>
+          <div class="fl"><span class="k">Engagement</span><span class="v">Website design + weekly newsletter launch</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- STEP 1 — THE ASK -->
+    <section class="step" data-label="The Ask">
+      <div class="card">
+        <div class="body-pad">
+          <div class="eyebrow">The ask</div>
+          <h2 style="font-size:clamp(23px,4.6vw,32px);margin:14px 0 16px;">Two things CORE Community 305 needs right now</h2>
+          <p class="lead">A place online that clearly represents who you are and what you do, and a simple, sustainable way to stay in your community's inbox every week, without it becoming a second job for your team.</p>
+
+          <div class="divider"></div>
+          <div class="eyebrow">What this looks like</div>
+          <div class="list" style="margin-top:16px;">
+            <div class="li"><span class="pip" style="background:var(--blue)"></span><p><b>A new website,</b> developed by our build partner and directed by Me&amp;Co. so it looks and reads like you.</p></div>
+            <div class="li"><span class="pip" style="background:var(--brown)"></span><p><b>A weekly newsletter</b> that keeps your community in the loop and coming back, built around whatever platform fits your needs best.</p></div>
+            <div class="li"><span class="pip" style="background:var(--sage)"></span><p><b>One brand foundation,</b> logo, color palette, and typography, carried consistently across both.</p></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- STEP 2 — GOALS -->
+    <section class="step" data-label="Goals">
+      <div class="card">
+        <div class="body-pad">
+          <div class="eyebrow">Objectives</div>
+          <h2 style="font-size:clamp(23px,4.6vw,32px);margin:14px 0 8px;">Three things we're here to move</h2>
+          <p class="lead" style="margin-bottom:26px;">Everything in this engagement ladders up to these.</p>
+          <div class="goals">
+            <div class="goal">
+              <div class="num">01</div>
+              <h3>A website that works as hard as you do</h3>
+              <p>Clear, current, and built to represent CORE Community 305 well the moment someone lands on it.</p>
+            </div>
+            <div class="goal">
+              <div class="num">02</div>
+              <h3>A newsletter people actually open</h3>
+              <p>A weekly send that feels worth opening, set up on whichever platform fits once we know your needs.</p>
+            </div>
+            <div class="goal">
+              <div class="num">03</div>
+              <h3>One brand, used consistently</h3>
+              <p>The same logo, color palette, and typography, carried the same way across the site and every send.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- STEP 3 — WHAT WE NEED FROM YOU -->
+    <section class="step" data-label="What We Need">
+      <div class="card">
+        <div class="body-pad">
+          <div class="eyebrow">Before we begin</div>
+          <h2 style="font-size:clamp(23px,4.6vw,32px);margin:14px 0 16px;">What we'll need from you</h2>
+          <p class="lead">The timeline on the next page assumes these are ready at kickoff. If any are still in progress, we'll build the plan around that, no problem either way.</p>
+
+          <div class="snap" style="margin-top:20px;">
+            <div class="snap-row head"><span>Item</span><span>Format</span><span>Notes</span></div>
+            <div class="snap-row">
+              <div class="snap-ch"><span class="pip" style="background:var(--blue)"></span>Logo files</div>
+              <div class="snap-aud">Vector, if available</div>
+              <div class="snap-note">Any existing sizes/versions are helpful too</div>
+            </div>
+            <div class="snap-row">
+              <div class="snap-ch"><span class="pip" style="background:var(--sage)"></span>Color palette</div>
+              <div class="snap-aud">Hex codes</div>
+              <div class="snap-note">If none exist yet, we can help define one</div>
+            </div>
+            <div class="snap-row">
+              <div class="snap-ch"><span class="pip" style="background:var(--brown)"></span>Typography</div>
+              <div class="snap-aud">Font names</div>
+              <div class="snap-note">Web-safe alternatives suggested if needed</div>
+            </div>
+            <div class="snap-row">
+              <div class="snap-ch"><span class="pip" style="background:var(--mid-blue)"></span>Brand guidelines</div>
+              <div class="snap-aud">Optional</div>
+              <div class="snap-note">Helpful if one already exists, not required</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- STEP 4 — SCOPE -->
+    <section class="step" data-label="Scope">
+      <div class="card">
+        <div class="body-pad">
+          <div class="eyebrow">Scope of work</div>
+          <h2 style="font-size:clamp(23px,4.6vw,32px);margin:14px 0 20px;">How the two pieces come together</h2>
+          <div class="scope">
+            <div class="scope-item">
+              <div class="scope-tag">Website</div>
+              <div>
+                <h3>Website design &amp; build</h3>
+                <p>Me&amp;Co. leads strategy, content direction, and brand application across the site. <em>Mora Studios</em>, our website build partner, handles the technical development.</p>
+              </div>
+            </div>
+            <div class="scope-item">
+              <div class="scope-tag b">Newsletter</div>
+              <div>
+                <h3>Weekly newsletter launch</h3>
+                <p>Platform selection, template design, and automation setup, finalized once we know your needs at the discovery call, plus your first weeks of content.</p>
+              </div>
+            </div>
+            <div class="scope-item">
+              <div class="scope-tag c">Foundation</div>
+              <div>
+                <h3>Brand handoff</h3>
+                <p>Logo, color palette, and typography gathered during onboarding, <em>the earlier these arrive, the faster both projects move</em>.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- STEP 5 — TIMELINE & PROCESS -->
+    <section class="step" data-label="Timeline">
+      <div class="card">
+        <div class="body-pad">
+          <div class="eyebrow">Timeline &amp; process</div>
+          <h2 style="font-size:clamp(23px,4.6vw,32px);margin:14px 0 24px;">From discovery call to launch</h2>
+          <div class="timeline">
+            <div class="phase">
+              <div class="wk">Step 1 · Discovery call</div>
+              <h3>Get aligned</h3>
+              <p>Patrick and Melody talk through goals, look and feel, and what CORE Community 305 needs from the website and the newsletter.</p>
+            </div>
+            <div class="phase mid">
+              <div class="wk">Step 2 · Onboarding portal</div>
+              <h3>Contract, invoice &amp; questionnaire</h3>
+              <p>You'll get access to your portal with the contract, invoice, and an onboarding questionnaire. This is also where we collect your logo, color palette, and typography.</p>
+            </div>
+            <div class="phase end">
+              <div class="wk">Step 3 · Build &amp; launch</div>
+              <h3>Website + newsletter, built</h3>
+              <p>Website build is typically up to 2 weeks; newsletter setup typically 1&ndash;2 weeks. Both depend on how quickly brand materials are handed off, timing flexes if they're still coming together.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- STEP 6 — FIT / APPROACH -->
+    <section class="step" data-label="Why Me&Co.">
+      <div class="card">
+        <div class="body-pad">
+          <div class="eyebrow">Why Me&amp;Co.</div>
+          <p class="fit-quote" style="margin-top:16px;">We handle the <em>strategy and the brand</em>. Our build partner handles the execution. You get one clear point of contact the whole way through.</p>
+          <div class="fit-grid">
+            <div class="fit-card">
+              <h3><span class="pip" style="background:var(--blue)"></span>Story-first</h3>
+              <p>The website and the newsletter both start from who CORE Community 305 already is, not a generic template.</p>
+            </div>
+            <div class="fit-card">
+              <h3><span class="pip" style="background:var(--brown)"></span>Partner-powered</h3>
+              <p>Website development runs through Mora Studios, our trusted build partner, so you get senior strategy from Me&amp;Co. and dedicated technical execution.</p>
+            </div>
+            <div class="fit-card">
+              <h3><span class="pip" style="background:var(--sage)"></span>Built to launch fast</h3>
+              <p>A clear onboarding process, contract, invoice, and questionnaire upfront, keeps timelines short and expectations clear.</p>
+            </div>
+            <div class="fit-card">
+              <h3><span class="pip" style="background:var(--coral)"></span>Consistent by design</h3>
+              <p>One brand foundation, used the same way across the site and every newsletter send.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- STEP 7 — PRICING (FINAL) -->
+    <section class="step" data-label="Investment">
+      <div class="card">
+        <div class="price-hero">
+          <img src="/assets/logo-cream-primary.png" alt="Me&amp;Co." class="inv-logo">
+          <div class="eyebrow on-dark" style="position:relative;">Investment &amp; next step</div>
+          <h2 style="margin-top:14px;">Getting started</h2>
+          <p>Pricing below covers the two pieces of this engagement. Final newsletter pricing is confirmed after your discovery call, once we know your automation and design needs.</p>
+        </div>
+
+        <div class="tiers-intro">
+          <div class="eyebrow">Investment</div>
+          <p style="margin-top:12px;">Both pieces can move forward together, or the website can lead with the newsletter to follow, whatever fits your timeline best.</p>
+        </div>
+
+        <div class="tiers">
+          <div class="tier">
+            <h3>Website design &amp; build</h3>
+            <div class="tier-price"><span class="amt">$2,275</span><span class="per">starting at</span></div>
+            <p class="who">Built in partnership with Mora Studios, our website build partner. Final scope and price depend on the site's size and features.</p>
+            <div class="tier-cols">
+              <div class="tier-col incl">
+                <div class="sublabel">Includes</div>
+                <ul>
+                  <li>Brand application across the site</li>
+                  <li>Content direction, guided by Me&amp;Co.</li>
+                  <li>Technical build and launch, by Mora Studios</li>
+                  <li>Typically up to 2 weeks once brand materials are in hand</li>
+                </ul>
+              </div>
+              <div class="tier-col excl">
+                <div class="sublabel">Confirmed at discovery</div>
+                <ul class="excl">
+                  <li>Number of pages</li>
+                  <li>Ongoing hosting &amp; maintenance</li>
+                  <li>Copywriting, if needed beyond direction</li>
+                  <li>Ongoing updates after launch</li>
+                </ul>
+              </div>
+            </div>
+            <div class="notes"><b>Full partnership details</b>See the full scope and pricing tiers at <a href="https://morastudios.co/partners/me-and-co/" target="_blank" rel="noopener">morastudios.co/partners/me-and-co</a>.</div>
+          </div>
+
+          <div class="tier">
+            <h3>Weekly newsletter launch</h3>
+            <div class="tier-price"><span class="amt">$1,000&ndash;$1,500</span><span class="per">range</span></div>
+            <p class="who">A newsletter built around your voice and your community, sent weekly.</p>
+            <div class="tier-cols">
+              <div class="tier-col incl">
+                <div class="sublabel">Includes</div>
+                <ul>
+                  <li>Platform selection &amp; setup</li>
+                  <li>Template design, on-brand</li>
+                  <li>Signup form, ready to embed</li>
+                  <li>Typically 1&ndash;2 weeks once brand materials are in hand</li>
+                </ul>
+              </div>
+              <div class="tier-col excl">
+                <div class="sublabel">Confirmed at discovery</div>
+                <ul class="excl">
+                  <li>Automation &amp; workflow complexity</li>
+                  <li>Ongoing weekly writing, if needed</li>
+                  <li>Platform subscription costs</li>
+                </ul>
+              </div>
+            </div>
+            <div class="notes"><b>Pricing notes</b>Final price depends on your automation needs and design complexity, confirmed at your discovery call.</div>
+          </div>
+        </div>
+
+        <div class="after">
+          <div class="eyebrow">After launch</div>
+          <h3>We'll build the right ongoing package together</h3>
+          <p>Once the website and newsletter are live, we'll know what CORE Community 305 actually needs going forward, whether that's ongoing content, maintenance, or nothing at all.</p>
+          <p class="after-note">No long-term commitment required to start.</p>
+        </div>
+
+        <div class="close">
+          <p>Ready when you are. The next step is a discovery call, followed by your onboarding portal with the contract, invoice, and a short questionnaire.</p>
+          <a href="mailto:melody@weareme.co?subject=CORE%20Community%20305%20%C3%97%20Me%26Co.%3A%20Let's%20start&body=Hey%20Melody%2C%0A%0AI'd%20like%20to%20book%20a%20discovery%20call%20for%20the%20website%20and%20newsletter%20project.%0A%0AThank%20you!" class="cta">Book the discovery call</a>
+          <div class="contact">Me&amp;Co. · melody@weareme.co</div>
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <!-- ============ NAV ============ -->
+  <div class="nav">
+    <button class="btn btn-back" id="back" disabled>← Back</button>
+    <button class="btn btn-next" id="next">Next →</button>
+  </div>
+
+</div>
+
+<script>
+(function(){
+  var steps  = Array.prototype.slice.call(document.querySelectorAll('.step'));
+  var total  = steps.length;
+  var fill   = document.getElementById('fill');
+  var count  = document.getElementById('count');
+  var ticks  = document.getElementById('ticks');
+  var stepTitle = document.getElementById('stepTitle');
+  var back   = document.getElementById('back');
+  var next   = document.getElementById('next');
+  var deck   = document.getElementById('deck');
+  var i = 0;
+
+  function pad(n){ return (n<10?'0':'')+n; }
+
+  steps.forEach(function(s, idx){
+    var b = document.createElement('button');
+    b.className = 'tick';
+    b.innerHTML = '<span class="dot"></span>' + s.getAttribute('data-label');
+    b.addEventListener('click', function(){ go(idx); });
+    ticks.appendChild(b);
+  });
+  var tickEls = Array.prototype.slice.call(ticks.children);
+
+  function go(n, skipScroll){
+    i = Math.max(0, Math.min(total-1, n));
+    steps.forEach(function(s, idx){ s.classList.toggle('is-active', idx===i); });
+
+    tickEls.forEach(function(t, idx){
+      t.classList.toggle('active', idx===i);
+      t.classList.toggle('done', idx < i);
+    });
+
+    var pct = total > 1 ? (i/(total-1))*100 : 100;
+    fill.style.width = pct + '%';
+    count.textContent = pad(i+1) + ' / ' + pad(total);
+    stepTitle.textContent = steps[i].getAttribute('data-label');
+
+    back.disabled = (i===0);
+    next.disabled = (i===total-1);
+    next.textContent = 'Next →';
+
+    if(!skipScroll){
+      window.scrollTo({top:0, behavior:'smooth'});
+    }
+  }
+
+  next.addEventListener('click', function(){
+    if(i===total-1) return;
+    go(i+1);
+  });
+  back.addEventListener('click', function(){ go(i-1); });
+
+  document.addEventListener('keydown', function(e){
+    if(e.target && /INPUT|TEXTAREA/.test(e.target.tagName)) return;
+    if(e.key==='ArrowRight') go(i+1);
+    if(e.key==='ArrowLeft') go(i-1);
+  });
+
+  go(0, true);
+})();
+</script>
+</body>
+</html>
