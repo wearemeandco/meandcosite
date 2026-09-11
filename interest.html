@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Interest Form — Me&amp;Co.</title>
+<meta name="description" content="Tell Me&amp;Co. what you're building and where marketing keeps falling off the list.">
+<link rel="icon" href="assets/logo-blue.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500;1,9..144,600&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css?v=6">
+<link rel="stylesheet" href="hub.css?v=1">
+<style>
+  /* ============================================================
+     One-question-at-a-time flow, Typeform style.
+     Every step is a <section class="q">; only the .current one shows.
+     ============================================================ */
+
+  .flow-wrap {
+    position: relative; overflow: hidden; background: var(--sand);
+    min-height: calc(100vh - 92px);
+    display: flex; flex-direction: column;
+  }
+
+  /* Progress */
+  .progress { height: 4px; background: rgba(34,49,94,0.10); flex: none; }
+  .progress span {
+    display: block; height: 100%; width: 0;
+    background: var(--blue); border-radius: 0 999px 999px 0;
+    transition: width 0.45s var(--ease);
+  }
+
+  .flow-body { flex: 1 1 auto; display: flex; align-items: center; padding: clamp(28px, 5vw, 56px) 0; }
+
+  .q { display: none; }
+  .q.current { display: block; animation: qIn 0.42s var(--ease) both; }
+  @keyframes qIn { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: none; } }
+
+  .q-count {
+    font-size: 11px; font-weight: 700; letter-spacing: 0.18em;
+    text-transform: uppercase; color: var(--brown); margin-bottom: 14px;
+  }
+  .q-title {
+    font-family: var(--serif); font-weight: 600;
+    font-size: clamp(26px, 4.2vw, 42px); line-height: 1.12;
+    color: var(--blue); text-wrap: pretty; margin: 0;
+  }
+  .q-help { margin: 12px 0 0 0; font-size: 16px; line-height: 1.65; color: var(--ink-soft); max-width: 520px; }
+  .q-fields { margin-top: 26px; max-width: 540px; }
+
+  /* Inputs get bigger and lighter than the standard .field treatment */
+  .q input[type="text"], .q input[type="email"], .q textarea, .q select {
+    width: 100%; font-family: var(--sans); font-size: 18px; color: var(--ink);
+    background: transparent; border: 0; border-bottom: 2px solid rgba(34,49,94,0.22);
+    border-radius: 0; padding: 12px 2px; outline: none;
+    transition: border-color 0.2s var(--ease);
+  }
+  .q input:focus, .q textarea:focus, .q select:focus { border-bottom-color: var(--blue); }
+  .q textarea { min-height: 108px; resize: vertical; line-height: 1.6; }
+  .q ::placeholder { color: #A79E92; }
+  .q select { cursor: pointer; appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%232A4FBF' stroke-width='2' stroke-linecap='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+    background-repeat: no-repeat; background-position: right 4px center; padding-right: 30px; }
+
+  .q-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 22px; }
+
+  /* Choice chips (single + multi) */
+  .choices { display: flex; flex-direction: column; gap: 10px; max-width: 560px; }
+  .choice {
+    display: flex; align-items: flex-start; gap: 13px; cursor: pointer;
+    background: var(--cream); border: 1.5px solid var(--sand-line);
+    border-radius: 14px; padding: 15px 17px; min-width: 0;
+    text-transform: none; letter-spacing: 0; font-size: 15.5px; font-weight: 400;
+    color: var(--ink); line-height: 1.35;
+    transition: border-color 0.18s var(--ease), background 0.18s var(--ease), transform 0.18s var(--ease);
+  }
+  .choice:hover { border-color: var(--blue); transform: translateX(3px); }
+  .choice input { flex: none; margin-top: 2px; width: auto; accent-color: #2A4FBF; }
+  .choice-key {
+    flex: none; width: 22px; height: 22px; border-radius: 6px;
+    border: 1.5px solid var(--sand-line); background: var(--sand-light);
+    font-size: 11px; font-weight: 700; color: var(--brown);
+    display: grid; place-items: center; margin-top: 1px;
+  }
+  .choice-name { display: block; font-weight: 600; color: var(--navy); }
+  .choice-sub { display: block; font-size: 13px; color: var(--brown); margin-top: 2px; }
+  .choice:has(input:checked) { border-color: var(--blue); background: #F2F5FD; }
+  .choice:has(input:checked) .choice-key { background: var(--blue); color: var(--cream); border-color: var(--blue); }
+
+  /* Nav */
+  .q-nav { display: flex; align-items: center; gap: 14px; margin-top: 30px; flex-wrap: wrap; }
+  .q-hint { font-size: 13px; color: var(--ink-soft); }
+  .q-hint kbd {
+    font-family: var(--sans); font-size: 11px; font-weight: 700;
+    background: var(--cream); border: 1px solid var(--sand-line);
+    border-radius: 5px; padding: 2px 6px;
+  }
+  .q-err { margin: 12px 0 0 0; font-size: 14px; color: #B3401C; }
+  .q-err[hidden] { display: none; }
+
+  .btn-back {
+    background: transparent; border: 0; cursor: pointer;
+    font-family: var(--sans); font-size: 14px; font-weight: 600; color: var(--ink-soft);
+    padding: 8px 2px;
+  }
+  .btn-back:hover { color: var(--blue); }
+
+  /* Intro "what happens next": kept tight so the intro clears the fold */
+  .intro-points { margin-top: 22px; display: flex; flex-direction: column; gap: 14px; max-width: 500px; }
+  .ip { display: flex; align-items: flex-start; gap: 12px; }
+  .ip-n {
+    flex: none; width: 24px; height: 24px; border-radius: 50%;
+    background: var(--blue); color: var(--cream);
+    font-size: 12px; font-weight: 700; display: grid; place-items: center;
+  }
+  .ip-t { font-family: var(--serif); font-weight: 600; font-size: 16.5px; color: var(--navy); line-height: 1.25; }
+  .ip-b { margin: 3px 0 0 0; font-size: 14px; line-height: 1.55; color: var(--ink-soft); }
+
+  /* Review step */
+  .review-list { max-width: 560px; }
+  .review-row {
+    display: grid; grid-template-columns: 150px 1fr; gap: 16px;
+    padding: 13px 0; border-top: 1px solid var(--sand-line); font-size: 15px;
+  }
+  .review-row:last-of-type { border-bottom: 1px solid var(--sand-line); }
+  .review-k { font-size: 12px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--brown); padding-top: 2px; }
+  .review-v { color: var(--ink); line-height: 1.55; }
+  .review-v.empty { color: #A79E92; font-style: italic; }
+  @media (max-width: 560px) {
+    .review-row { grid-template-columns: 1fr; gap: 4px; }
+    .q-row { grid-template-columns: 1fr; }
+    .choice-key { display: none; }
+  }
+</style>
+</head>
+<body>
+<div class="grain"></div>
+
+<!-- Tab bar -->
+<nav class="site-nav">
+  <div class="wrap">
+    <a href="index.html" class="logo"><img src="assets/logo-blue.png" alt="Me&amp;Co."></a>
+    <div class="links">
+      <a href="index.html" class="nav-link">Home</a>
+      <a href="about.html" class="nav-link">About</a>
+      <div class="nav-group">
+        <a href="services.html" class="nav-link" aria-haspopup="true">Services<svg class="nav-caret" viewBox="0 0 10 10" aria-hidden="true"><path d="M2 3.5 L5 6.5 L8 3.5" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+        <div class="nav-sub">
+          <a href="partners.html">Partners<svg class="nav-squiggle" viewBox="0 0 60 8" preserveAspectRatio="none"><path pathLength="1" d="M0 4 Q5 0 10 4 T20 4 T30 4 T40 4 T50 4 T60 4" stroke="#2A4FBF" stroke-width="2" fill="none" stroke-linecap="round"/></svg></a>
+        </div>
+      </div>
+      <a href="work.html" class="nav-link">Our Work</a>
+      <div class="nav-group">
+        <a href="blog.html" class="nav-link" aria-haspopup="true">Blog<svg class="nav-caret" viewBox="0 0 10 10" aria-hidden="true"><path d="M2 3.5 L5 6.5 L8 3.5" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+        <div class="nav-sub">
+          <a href="newsletter.html">Newsletter<svg class="nav-squiggle" viewBox="0 0 60 8" preserveAspectRatio="none"><path pathLength="1" d="M0 4 Q5 0 10 4 T20 4 T30 4 T40 4 T50 4 T60 4" stroke="#2A4FBF" stroke-width="2" fill="none" stroke-linecap="round"/></svg></a>
+        </div>
+      </div>
+      <!-- HIDDEN until events launch:
+      <a href="events.html" class="nav-link">Events</a>
+      -->
+      <a href="contact.html" class="nav-cta">Start a Conversation</a>
+      <!-- HIDDEN until portal.weareme.co is connected:
+      <a href="https://portal.weareme.co" class="nav-login">Log In</a>
+      -->
+    </div>
+    <button class="nav-toggle" aria-label="Open menu">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#2A4FBF" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+    </button>
+  </div>
+</nav>
+<div class="mobile-menu">
+  <button class="mobile-close" aria-label="Close menu">
+    <svg viewBox="0 0 24 24" fill="none" stroke="#2A4FBF" stroke-width="2" stroke-linecap="round"><line x1="5" y1="5" x2="19" y2="19"/><line x1="19" y1="5" x2="5" y2="19"/></svg>
+  </button>
+  <a href="index.html">Home</a>
+  <a href="about.html">About</a>
+  <a href="services.html">Services</a>
+  <a href="partners.html" class="mobile-sub">Partners</a>
+  <a href="work.html">Our Work</a>
+  <a href="blog.html">Blog</a>
+  <a href="newsletter.html" class="mobile-sub">Newsletter</a>
+  <!-- HIDDEN until events launch:
+  <a href="events.html">Events</a>
+  -->
+  <a href="contact.html" class="nav-cta">Start a Conversation</a>
+  <!-- HIDDEN until portal.weareme.co is connected:
+  <a href="https://portal.weareme.co" class="nav-login">Log In</a>
+  -->
+</div>
+
+<div class="flow-wrap">
+  <div class="progress"><span id="bar"></span></div>
+  <div class="blob" style="top: -130px; left: -70px; width: 340px; height: 340px; background: var(--rose); opacity: 0.26;"></div>
+  <div class="blob" style="bottom: -160px; right: -80px; width: 370px; height: 370px; background: var(--teal); opacity: 0.20; animation-direction: reverse; animation-duration: 21s;"></div>
+
+  <div class="flow-body">
+    <div class="wrap" style="position: relative; width: 100%;">
+
+      <!--
+        Field names are the payload contract; keep them stable:
+        name, email, business, link, services, challenge, timeline, budget, source, subscribe
+      -->
+      <form id="interest-form" name="interest" method="POST" data-netlify="true" netlify-honeypot="company">
+        <input type="hidden" name="form-name" value="interest">
+        <p style="display:none;"><label>Leave this empty: <input name="company"></label></p>
+
+        <!-- 0 · intro -->
+        <section class="q current" data-step="intro">
+          <div class="eyebrow">Work with Me&amp;Co.</div>
+          <h1 class="q-title" style="margin-top: 15px;">Cu&eacute;ntanos<br>what you&rsquo;re building.</h1>
+          <svg viewBox="0 0 200 20" preserveAspectRatio="none" style="width: clamp(260px, 85%, 560px); height: 14px; margin-top: 16px; display: block;"><path d="M0 10 Q10 0 20 10 T40 10 T60 10 T80 10 T100 10 T120 10 T140 10 T160 10 T180 10 T200 10" stroke="#D9A5A0" stroke-width="3" fill="none" stroke-linecap="round"/></svg>
+          <p class="q-help" style="margin-top:14px;">Seven quick questions, about two minutes. No pitch deck required.</p>
+
+          <!-- "We read it ourselves" was cut so the whole intro clears the fold. -->
+          <div class="intro-points">
+            <div class="ip">
+              <span class="ip-n">1</span>
+              <div>
+                <div class="ip-t">A reply within 2 business days</div>
+                <p class="ip-b">Either a time to talk, or a straight answer that we&rsquo;re not the fit.</p>
+              </div>
+            </div>
+            <div class="ip">
+              <span class="ip-n">2</span>
+              <div>
+                <div class="ip-t">A proposal built for you</div>
+                <p class="ip-b">If it&rsquo;s a fit, you get a private proposal with exact scope and exact pricing.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="q-nav" style="margin-top:24px;">
+            <button type="button" class="btn btn-blue" data-next>Start &rarr;</button>
+            <span class="q-hint">or press <kbd>Enter</kbd></span>
+          </div>
+        </section>
+
+        <!-- 1 · name -->
+        <section class="q" data-step="1" data-required="name">
+          <div class="q-count">Question 1 of 7</div>
+          <h2 class="q-title">First things first: what&rsquo;s your name?</h2>
+          <div class="q-fields">
+            <input id="i-name" name="name" type="text" autocomplete="name" placeholder="Ana Rivera">
+          </div>
+          <p class="q-err" hidden></p>
+          <div class="q-nav">
+            <button type="button" class="btn-back" data-back>&larr; Back</button>
+            <button type="button" class="btn btn-blue" data-next>OK &rarr;</button>
+            <span class="q-hint">press <kbd>Enter</kbd></span>
+          </div>
+        </section>
+
+        <!-- 2 · email + business -->
+        <section class="q" data-step="2" data-required="email,business">
+          <div class="q-count">Question 2 of 7</div>
+          <h2 class="q-title">Where can we reach you?</h2>
+          <p class="q-help">We&rsquo;ll only use this to reply. Nothing gets shared.</p>
+          <div class="q-fields q-row">
+            <div>
+              <label class="q-count" style="display:block;margin-bottom:2px;">Email</label>
+              <input id="i-email" name="email" type="email" autocomplete="email" placeholder="ana@yourbusiness.com">
+            </div>
+            <div>
+              <label class="q-count" style="display:block;margin-bottom:2px;">Business or program</label>
+              <input id="i-business" name="business" type="text" placeholder="Casa Luz Wellness">
+            </div>
+          </div>
+          <p class="q-err" hidden></p>
+          <div class="q-nav">
+            <button type="button" class="btn-back" data-back>&larr; Back</button>
+            <button type="button" class="btn btn-blue" data-next>OK &rarr;</button>
+          </div>
+        </section>
+
+        <!-- 3 · services -->
+        <section class="q" data-step="3" data-required="services">
+          <div class="q-count">Question 3 of 7</div>
+          <h2 class="q-title">What are you interested in?</h2>
+          <p class="q-help">Pick as many as apply. Not sure is a real answer.</p>
+          <div class="q-fields choices">
+            <label class="choice"><span class="choice-key">A</span><input type="checkbox" name="services" value="Founder Authority Systems" hidden><span><span class="choice-name">Founder Authority Systems</span><span class="choice-sub">From $3,500</span></span></label>
+            <label class="choice"><span class="choice-key">B</span><input type="checkbox" name="services" value="Strategic Content Engine" hidden><span><span class="choice-name">Strategic Content Engine</span><span class="choice-sub">From $5,000/mo</span></span></label>
+            <label class="choice"><span class="choice-key">C</span><input type="checkbox" name="services" value="AI Enabled Marketing Workflows" hidden><span><span class="choice-name">AI Enabled Marketing Workflows</span><span class="choice-sub">From $2,000</span></span></label>
+            <label class="choice"><span class="choice-key">D</span><input type="checkbox" name="services" value="Partnership + Program Marketing" hidden><span><span class="choice-name">Partnership + Program Marketing</span><span class="choice-sub">From $5,000</span></span></label>
+            <label class="choice"><span class="choice-key">E</span><input type="checkbox" name="services" value="Marketing Systems Intensive" hidden><span><span class="choice-name">Marketing Systems Intensive</span><span class="choice-sub">$1,250 &middot; 1:1 session</span></span></label>
+            <label class="choice"><span class="choice-key">F</span><input type="checkbox" name="services" value="Program Workshop Booking" hidden><span><span class="choice-name">Program Workshop Booking</span><span class="choice-sub">From $3,500 &middot; per workshop</span></span></label>
+            <label class="choice"><span class="choice-key">G</span><input type="checkbox" name="services" value="1:1 Strategy Call" hidden><span><span class="choice-name">1:1 Strategy Call</span><span class="choice-sub">$249 &middot; 90 minutes</span></span></label>
+            <label class="choice"><span class="choice-key">H</span><input type="checkbox" name="services" value="Not sure yet" hidden><span><span class="choice-name">Not sure yet</span><span class="choice-sub">Help me figure it out</span></span></label>
+          </div>
+          <p class="q-err" hidden></p>
+          <div class="q-nav">
+            <button type="button" class="btn-back" data-back>&larr; Back</button>
+            <button type="button" class="btn btn-blue" data-next>OK &rarr;</button>
+          </div>
+        </section>
+
+        <!-- 4 · challenge -->
+        <section class="q" data-step="4" data-required="challenge">
+          <div class="q-count">Question 4 of 7</div>
+          <h2 class="q-title">Where is marketing falling off the list right now?</h2>
+          <p class="q-help">The thing that keeps slipping, or the part you dread most. Be honest. It&rsquo;s the most useful answer here.</p>
+          <div class="q-fields">
+            <textarea id="i-challenge" name="challenge" placeholder="Every time a launch comes up I go quiet on social for a month…"></textarea>
+          </div>
+          <p class="q-err" hidden></p>
+          <div class="q-nav">
+            <button type="button" class="btn-back" data-back>&larr; Back</button>
+            <button type="button" class="btn btn-blue" data-next>OK &rarr;</button>
+          </div>
+        </section>
+
+        <!-- 5 · timeline -->
+        <section class="q" data-step="5">
+          <div class="q-count">Question 5 of 7</div>
+          <h2 class="q-title">When are you hoping to start?</h2>
+          <div class="q-fields choices">
+            <label class="choice"><span class="choice-key">A</span><input type="radio" name="timeline" value="Ready now" hidden><span class="choice-name">Ready now</span></label>
+            <label class="choice"><span class="choice-key">B</span><input type="radio" name="timeline" value="In the next 1–3 months" hidden><span class="choice-name">In the next 1&ndash;3 months</span></label>
+            <label class="choice"><span class="choice-key">C</span><input type="radio" name="timeline" value="3–6 months out" hidden><span class="choice-name">3&ndash;6 months out</span></label>
+            <label class="choice"><span class="choice-key">D</span><input type="radio" name="timeline" value="Just exploring" hidden><span class="choice-name">Just exploring</span></label>
+          </div>
+          <div class="q-nav">
+            <button type="button" class="btn-back" data-back>&larr; Back</button>
+            <button type="button" class="btn btn-blue" data-next>OK &rarr;</button>
+          </div>
+        </section>
+
+        <!-- 6 · budget -->
+        <section class="q" data-step="6">
+          <div class="q-count">Question 6 of 7</div>
+          <h2 class="q-title">What budget are you working with?</h2>
+          <p class="q-help">A range is fine. This helps us point you at the right thing instead of the biggest thing.</p>
+          <div class="q-fields choices">
+            <label class="choice"><span class="choice-key">A</span><input type="radio" name="budget" value="Under $2,000" hidden><span class="choice-name">Under $2,000</span></label>
+            <label class="choice"><span class="choice-key">B</span><input type="radio" name="budget" value="$2,000 – $5,000" hidden><span class="choice-name">$2,000 &ndash; $5,000</span></label>
+            <label class="choice"><span class="choice-key">C</span><input type="radio" name="budget" value="$5,000 – $10,000" hidden><span class="choice-name">$5,000 &ndash; $10,000</span></label>
+            <label class="choice"><span class="choice-key">D</span><input type="radio" name="budget" value="$10,000+" hidden><span class="choice-name">$10,000+</span></label>
+            <label class="choice"><span class="choice-key">E</span><input type="radio" name="budget" value="Not sure yet" hidden><span class="choice-name">Not sure yet</span></label>
+          </div>
+          <div class="q-nav">
+            <button type="button" class="btn-back" data-back>&larr; Back</button>
+            <button type="button" class="btn btn-blue" data-next>OK &rarr;</button>
+          </div>
+        </section>
+
+        <!-- 7 · source + link -->
+        <section class="q" data-step="7">
+          <div class="q-count">Question 7 of 7</div>
+          <h2 class="q-title">Last one: how did you find us?</h2>
+          <div class="q-fields q-row">
+            <div>
+              <label class="q-count" style="display:block;margin-bottom:2px;">How you found us</label>
+              <input id="i-source" name="source" type="text" placeholder="Newsletter, a friend, an event…">
+            </div>
+            <div>
+              <label class="q-count" style="display:block;margin-bottom:2px;">Website or Instagram</label>
+              <input id="i-link" name="link" type="text" placeholder="@casaluz">
+            </div>
+          </div>
+          <label class="choice" style="margin-top: 24px; max-width: 560px;">
+            <input type="checkbox" name="subscribe" value="yes" checked>
+            <span class="choice-name" style="font-weight:400;color:var(--ink);">Also send me the Me&amp;Co. newsletter.</span>
+          </label>
+          <div class="q-nav">
+            <button type="button" class="btn-back" data-back>&larr; Back</button>
+            <button type="button" class="btn btn-blue" data-next>Review &rarr;</button>
+          </div>
+        </section>
+
+        <!-- 8 · review -->
+        <section class="q" data-step="review">
+          <div class="q-count">Almost done</div>
+          <h2 class="q-title">Look right?</h2>
+          <p class="q-help">Give it a quick read, then send it over.</p>
+          <div class="q-fields review-list" id="review"></div>
+          <div class="q-nav">
+            <button type="button" class="btn-back" data-back>&larr; Back</button>
+            <button type="submit" class="btn btn-blue">Send it over</button>
+          </div>
+          <p style="margin: 16px 0 0 0; font-size: 12.5px; color: #8A8177;">We read every one ourselves and never share your details.</p>
+        </section>
+
+        <!-- 9 · done -->
+        <section class="q" data-step="done">
+          <div class="eyebrow">Received</div>
+          <h2 class="q-title" style="margin-top: 15px;">Got it. &iexcl;Gracias!</h2>
+          <p class="q-help">Melody reads every one of these herself. You&rsquo;ll hear back within two business days, usually sooner, with either a time to talk or a straight answer that we&rsquo;re not the fit.</p>
+          <div class="q-nav">
+            <a href="newsletter.html" class="btn btn-outline">Read the newsletter</a>
+          </div>
+        </section>
+
+      </form>
+    </div>
+  </div>
+</div>
+
+<script src="script.js?v=5"></script>
+<script>
+(function () {
+  'use strict';
+  var form  = document.getElementById('interest-form');
+  var steps = Array.prototype.slice.call(form.querySelectorAll('.q'));
+  var bar   = document.getElementById('bar');
+  var i     = 0;
+
+  // Progress counts only the 7 real questions, not intro/review/done.
+  var FIRST_Q = 1, LAST_Q = 7;
+
+  function show(n) {
+    steps[i].classList.remove('current');
+    i = n;
+    steps[i].classList.add('current');
+    var step = steps[i].dataset.step;
+    var pct;
+    if (step === 'intro') pct = 0;
+    else if (step === 'done') pct = 100;
+    else if (step === 'review') pct = 100;
+    else pct = ((+step - FIRST_Q + 1) / (LAST_Q - FIRST_Q + 1)) * 100;
+    bar.style.width = pct + '%';
+    var f = steps[i].querySelector('input:not([type=hidden]):not([hidden]), textarea');
+    if (f && f.type !== 'checkbox' && f.type !== 'radio') setTimeout(function () { f.focus(); }, 80);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function err(sec, msg) {
+    var p = sec.querySelector('.q-err');
+    if (!p) return;
+    if (msg) { p.textContent = msg; p.hidden = false; } else { p.hidden = true; }
+  }
+
+  function valid(sec) {
+    var need = sec.dataset.required;
+    if (!need) return true;
+    var names = need.split(',');
+    for (var k = 0; k < names.length; k++) {
+      var nm = names[k];
+      var nodes = sec.querySelectorAll('[name="' + nm + '"]');
+      if (!nodes.length) continue;
+      var first = nodes[0];
+      if (first.type === 'checkbox') {
+        var any = Array.prototype.some.call(nodes, function (n) { return n.checked; });
+        if (!any) { err(sec, 'Pick at least one to keep going.'); return false; }
+      } else {
+        if (!first.value.trim()) { err(sec, 'This one is needed to keep going.'); return false; }
+        if (first.type === 'email' && !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(first.value.trim())) {
+          err(sec, 'That email address does not look right.'); return false;
+        }
+      }
+    }
+    err(sec, null);
+    return true;
+  }
+
+  function buildReview() {
+    var d = new FormData(form);
+    var svc = d.getAll('services');
+    var rows = [
+      ['Name', d.get('name')],
+      ['Email', d.get('email')],
+      ['Business', d.get('business')],
+      ['Interested in', svc.join(', ')],
+      ['The challenge', d.get('challenge')],
+      ['Timeline', d.get('timeline')],
+      ['Budget', d.get('budget')],
+      ['Found us via', d.get('source')],
+      ['Link', d.get('link')]
+    ];
+    document.getElementById('review').innerHTML = rows.map(function (r) {
+      var v = (r[1] || '').toString().trim();
+      return '<div class="review-row"><div class="review-k">' + r[0] + '</div>' +
+             '<div class="review-v' + (v ? '' : ' empty') + '">' +
+             (v ? v.replace(/</g, '&lt;') : 'Not answered') + '</div></div>';
+    }).join('');
+  }
+
+  form.addEventListener('click', function (e) {
+    var next = e.target.closest('[data-next]');
+    var back = e.target.closest('[data-back]');
+    if (next) {
+      if (!valid(steps[i])) return;
+      if (steps[i + 1] && steps[i + 1].dataset.step === 'review') buildReview();
+      show(i + 1);
+    } else if (back) {
+      show(i - 1);
+    }
+  });
+
+  // Enter advances, except inside the textarea (where it should make a newline).
+  form.addEventListener('keydown', function (e) {
+    if (e.key !== 'Enter') return;
+    if (e.target.tagName === 'TEXTAREA') return;
+    var step = steps[i].dataset.step;
+    if (step === 'review' || step === 'done') return;
+    e.preventDefault();
+    var btn = steps[i].querySelector('[data-next]');
+    if (btn) btn.click();
+  });
+
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    var d = new FormData(form), pairs = [];
+    d.forEach(function (v, k) { pairs.push(encodeURIComponent(k) + '=' + encodeURIComponent(v)); });
+    fetch('/', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: pairs.join('&')
+    }).finally(function () {
+      show(steps.length - 1);
+      bar.style.width = '100%';
+    });
+  });
+
+  show(0);
+})();
+</script>
+</body>
+</html>

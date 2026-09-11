@@ -1,0 +1,82 @@
+{
+  "_comment": "Seed / fallback data. When AIRTABLE_API_KEY + AIRTABLE_BASE_ID are set, build-events.js pulls the Events table from Airtable instead and ignores this file. Field names here match the Airtable column names exactly.",
+  "events": [
+    {
+      "Name": "[Event Name]",
+      "Slug": "event-one",
+      "Status": "Upcoming",
+      "Featured": true,
+      "Date": "2026-10-09",
+      "DateLabel": "[Thursday, October 9, 2026]",
+      "Time": "[6:00 – 8:30 PM]",
+      "Venue": "[Venue Name, Austin, TX]",
+      "Blurb": "[One line on what this gathering is and who it's for. This is all that shows on the list.]",
+      "Intro": "[One or two sentences on what this gathering is, who it's for, and why someone should give up an evening for it. Keep it warm, keep it specific.]",
+      "Cost": "[Free to attend · 40 spots]",
+      "Highlights": [
+        { "Title": "[Highlight one]", "Body": "[A sentence on what attendees actually walk away with.]" },
+        { "Title": "[Highlight two]", "Body": "[A sentence on the format: panel, workshop, mixer, working session.]" },
+        { "Title": "[Highlight three]", "Body": "[A sentence on who else will be in the room.]" }
+      ],
+      "Agenda": [
+        { "Time": "[6:00 PM]", "Title": "[Doors, welcome and refreshments]", "Body": "[Optional line of detail for this block.]" },
+        { "Time": "[6:30 PM]", "Title": "[Session title]", "Body": "[Who is leading it and what it covers.]" },
+        { "Time": "[7:30 PM]", "Title": "[Session title]", "Body": "[Who is leading it and what it covers.]" },
+        { "Time": "[8:00 PM]", "Title": "[Open networking and close]", "Body": "[Optional line of detail for this block.]" }
+      ],
+      "Speakers": [
+        { "Name": "[Speaker Name]", "Title": "[Title, Company]" },
+        { "Name": "[Speaker Name]", "Title": "[Title, Company]" },
+        { "Name": "[Speaker Name]", "Title": "[Title, Company]" }
+      ]
+    },
+    {
+      "Name": "[Second event name]",
+      "Slug": "event-two",
+      "Status": "Upcoming",
+      "Featured": false,
+      "Date": "2026-12-04",
+      "DateLabel": "[Friday, December 4, 2026]",
+      "Time": "[6:00 – 9:00 PM]",
+      "Venue": "[Venue, City]",
+      "Blurb": "[One line on what this one is.]",
+      "Intro": "[Fuller description for the detail page.]",
+      "Cost": "[Free to attend]",
+      "Highlights": [],
+      "Agenda": [],
+      "Speakers": []
+    },
+    {
+      "Name": "Coquito Conmigo",
+      "Slug": "coquito-conmigo",
+      "Status": "Past",
+      "Featured": false,
+      "Date": "2025-12-01",
+      "DateLabel": "December 2025",
+      "Time": "",
+      "Venue": "",
+      "Blurb": "Our annual community gathering, and $1,000 raised for Puerto Rican small-business relief.",
+      "Intro": "Our annual gathering reminded us why we do this work: community over perfection, connection over competition. And we're overjoyed to have raised $1,000 in support of Puerto Rican small-business relief. Thank you for showing up.",
+      "Cost": "",
+      "Highlights": [],
+      "Agenda": [],
+      "Speakers": []
+    },
+    {
+      "Name": "Texas State University: LIFT Program",
+      "Slug": "txsu-lift",
+      "Status": "Past",
+      "Featured": false,
+      "Date": "2025-06-01",
+      "DateLabel": "2025",
+      "Time": "",
+      "Venue": "",
+      "Blurb": "A social media growth curriculum for TXSU's founder program: live training, workbooks and coaching.",
+      "Intro": "We partnered with TXSU's LIFT Program to teach founders how to use social media for real business growth, including live training, a 90-Day Social Media Roadmap, practical workbooks, and coaching sessions. Participants rating their social media fluency \"good\" or \"expert\" went from 5% to 97%.",
+      "Cost": "",
+      "Highlights": [],
+      "Agenda": [],
+      "Speakers": []
+    }
+  ]
+}

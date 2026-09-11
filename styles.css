@@ -224,6 +224,62 @@ button { -webkit-tap-highlight-color: transparent; }
   .nav-toggle { display: flex; }
 }
 
+/* ---------- Nav dropdowns ----------
+   A menu item with a sub-page opens a small panel on hover or keyboard
+   focus. Each item carries the same squiggle as the active nav link; it
+   draws in on hover, and stays drawn on the page you are on. */
+.nav-group { position: relative; display: inline-flex; align-items: center; }
+.nav-group > .nav-link { display: inline-flex; align-items: center; gap: 5px; }
+.nav-caret { width: 9px; height: 9px; flex: none; transition: transform 0.2s var(--ease); }
+.nav-group:hover .nav-caret,
+.nav-group:focus-within .nav-caret { transform: rotate(180deg); }
+.nav-sub {
+  position: absolute; top: calc(100% + 12px); left: 50%;
+  min-width: 176px; padding: 8px;
+  background: var(--cream); border: 1px solid var(--sand-line); border-radius: 14px;
+  box-shadow: 0 18px 40px -22px rgba(34, 49, 94, 0.45);
+  opacity: 0; visibility: hidden; transform: translate(-50%, -6px);
+  transition: opacity 0.2s var(--ease), transform 0.2s var(--ease), visibility 0.2s;
+  z-index: 60;
+}
+.nav-sub::before { content: ''; position: absolute; left: 0; right: 0; top: -14px; height: 14px; }
+.nav-group:hover .nav-sub,
+.nav-group:focus-within .nav-sub { opacity: 1; visibility: visible; transform: translate(-50%, 0); }
+.nav-sub a {
+  position: relative; display: block; padding: 10px 14px 13px 14px;
+  font-size: 14px; font-weight: 600; color: var(--ink); border-radius: 10px;
+  transition: color 0.2s var(--ease), background 0.2s var(--ease);
+}
+.nav-sub a:hover { color: var(--blue); background: var(--sand-light); }
+.nav-sub a.active { color: var(--blue); font-weight: 700; }
+.nav-sub .nav-squiggle { left: 14px; width: calc(100% - 28px); bottom: 5px; }
+.nav-sub .nav-squiggle path {
+  animation: none; stroke-dashoffset: 1;
+  transition: stroke-dashoffset 0.45s cubic-bezier(0.65, 0, 0.35, 1);
+}
+.nav-sub a:hover .nav-squiggle path,
+.nav-sub a.active .nav-squiggle path { stroke-dashoffset: 0; }
+
+/* Log In: an outline pill beside the call to action. */
+.nav-login {
+  display: inline-block; font-size: 13px; font-weight: 700; letter-spacing: 0.08em;
+  text-transform: uppercase; padding: 10px 20px; border-radius: 999px;
+  border: 1.5px solid var(--blue); color: var(--blue);
+  transition: background 0.2s var(--ease), color 0.2s var(--ease);
+}
+.nav-login:hover { background: var(--blue); color: var(--cream); }
+
+/* Mobile menu: a sub-page sits under its parent, smaller and indented. */
+.mobile-menu a.mobile-sub {
+  font-family: var(--sans); font-size: 18px; font-weight: 600; color: var(--ink);
+  padding: 10px 0 12px 22px; position: relative;
+}
+.mobile-menu a.mobile-sub::before {
+  content: ''; position: absolute; left: 4px; top: 50%; width: 10px; height: 1.5px;
+  background: var(--rose);
+}
+.mobile-menu .nav-login { margin-top: 10px; text-align: center; font-family: var(--sans); font-size: 14px; }
+
 /* ---------- Buttons ---------- */
 .btn {
   display: inline-block;
@@ -247,6 +303,16 @@ button { -webkit-tap-highlight-color: transparent; }
   color: var(--cream);
   transform: translateY(-2px);
   box-shadow: 0 16px 32px -16px rgba(42, 79, 191, 0.55);
+}
+.btn-outline {
+  background: transparent;
+  color: var(--blue);
+  box-shadow: inset 0 0 0 1.5px var(--blue);
+}
+.btn-outline:hover {
+  background: var(--blue);
+  color: var(--cream);
+  transform: translateY(-2px);
 }
 .btn-cream {
   background: var(--cream);

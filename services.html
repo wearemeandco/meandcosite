@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500;1,9..144,600&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="styles.css?v=5">
+<link rel="stylesheet" href="styles.css?v=6">
 </head>
 <body>
 <div class="grain"></div>
@@ -19,23 +19,33 @@
 <nav class="site-nav">
   <div class="wrap">
     <a href="index.html" class="logo"><img src="assets/logo-blue.png" alt="Me&amp;Co."></a>
-    <div class="nav-end">
-      <div class="links">
-        <a href="index.html" class="nav-link">Home</a>
-        <a href="about.html" class="nav-link">About</a>
-        <a href="services.html" class="nav-link active">Services<svg class="nav-squiggle" viewBox="0 0 60 8" preserveAspectRatio="none"><path pathLength="1" d="M0 4 Q5 0 10 4 T20 4 T30 4 T40 4 T50 4 T60 4" stroke="#2A4FBF" stroke-width="2" fill="none" stroke-linecap="round"/></svg></a>
-        <a href="work.html" class="nav-link">Our Work</a>
-        <a href="blog.html" class="nav-link">Blog</a>
-        <a href="contact.html" class="nav-cta">Start a Conversation</a>
+    <div class="links">
+      <a href="index.html" class="nav-link">Home</a>
+      <a href="about.html" class="nav-link">About</a>
+      <div class="nav-group">
+        <a href="services.html" class="nav-link active" aria-haspopup="true">Services<svg class="nav-caret" viewBox="0 0 10 10" aria-hidden="true"><path d="M2 3.5 L5 6.5 L8 3.5" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg><svg class="nav-squiggle" viewBox="0 0 60 8" preserveAspectRatio="none"><path pathLength="1" d="M0 4 Q5 0 10 4 T20 4 T30 4 T40 4 T50 4 T60 4" stroke="#2A4FBF" stroke-width="2" fill="none" stroke-linecap="round"/></svg></a>
+        <div class="nav-sub">
+          <a href="partners.html">Partners<svg class="nav-squiggle" viewBox="0 0 60 8" preserveAspectRatio="none"><path pathLength="1" d="M0 4 Q5 0 10 4 T20 4 T30 4 T40 4 T50 4 T60 4" stroke="#2A4FBF" stroke-width="2" fill="none" stroke-linecap="round"/></svg></a>
+        </div>
       </div>
-      <button type="button" class="cart-trigger" aria-label="Open cart">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2A4FBF" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 4h2l2.4 12.4a2 2 0 0 0 2 1.6h7.2a2 2 0 0 0 2-1.6L20 8H6"/><circle cx="9.5" cy="20.5" r="1.3" fill="#2A4FBF" stroke="none"/><circle cx="17.5" cy="20.5" r="1.3" fill="#2A4FBF" stroke="none"/></svg>
-        <span class="cart-badge">0</span>
-      </button>
-      <button class="nav-toggle" aria-label="Open menu">
-        <svg viewBox="0 0 24 24" fill="none" stroke="#2A4FBF" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
-      </button>
+      <a href="work.html" class="nav-link">Our Work</a>
+      <div class="nav-group">
+        <a href="blog.html" class="nav-link" aria-haspopup="true">Blog<svg class="nav-caret" viewBox="0 0 10 10" aria-hidden="true"><path d="M2 3.5 L5 6.5 L8 3.5" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+        <div class="nav-sub">
+          <a href="newsletter.html">Newsletter<svg class="nav-squiggle" viewBox="0 0 60 8" preserveAspectRatio="none"><path pathLength="1" d="M0 4 Q5 0 10 4 T20 4 T30 4 T40 4 T50 4 T60 4" stroke="#2A4FBF" stroke-width="2" fill="none" stroke-linecap="round"/></svg></a>
+        </div>
+      </div>
+      <!-- HIDDEN until events launch:
+      <a href="events.html" class="nav-link">Events</a>
+      -->
+      <a href="contact.html" class="nav-cta">Start a Conversation</a>
+      <!-- HIDDEN until portal.weareme.co is connected:
+      <a href="https://portal.weareme.co" class="nav-login">Log In</a>
+      -->
     </div>
+    <button class="nav-toggle" aria-label="Open menu">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#2A4FBF" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+    </button>
   </div>
 </nav>
 <div class="mobile-menu">
@@ -45,9 +55,17 @@
   <a href="index.html">Home</a>
   <a href="about.html">About</a>
   <a href="services.html">Services</a>
+  <a href="partners.html" class="mobile-sub">Partners</a>
   <a href="work.html">Our Work</a>
   <a href="blog.html">Blog</a>
+  <a href="newsletter.html" class="mobile-sub">Newsletter</a>
+  <!-- HIDDEN until events launch:
+  <a href="events.html">Events</a>
+  -->
   <a href="contact.html" class="nav-cta">Start a Conversation</a>
+  <!-- HIDDEN until portal.weareme.co is connected:
+  <a href="https://portal.weareme.co" class="nav-login">Log In</a>
+  -->
 </div>
 
 <!-- Hero -->
