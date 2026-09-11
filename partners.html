@@ -31,6 +31,8 @@
   .logo-cell:hover { border-color: var(--blue); transform: translateY(-2px); }
   .logo-cell img { max-height: 60px; max-width: 88%; width: auto; display: block; transition: transform 0.2s var(--ease); }
   .logo-cell:hover img { transform: scale(1.04); }
+  /* Some logo files carry a white box; multiply lets the cream show through it. */
+  .logo-cell:not(.on-dark) img { mix-blend-mode: multiply; }
   .logo-cell.text-only { font-family: var(--serif); font-weight: 600; font-size: 16px; color: var(--navy); text-align: center; line-height: 1.25; }
 
   /* Keep the 3x3 even on phones by shrinking the cells, not the column count:
@@ -60,7 +62,7 @@
     background: var(--sand-light); border: 1px solid var(--sand-line); border-radius: 16px;
     padding: clamp(20px, 3vw, 28px) 18px;
   }
-  .lockup img { height: clamp(46px, 6vw, 62px); width: auto; display: block; }
+  .lockup img { height: clamp(26px, 3.4vw, 36px); width: auto; display: block; }
   .lockup.on-dark { background: var(--navy); border-color: var(--navy); }
   .lockup.on-dark img { height: clamp(30px, 4vw, 40px); }
   .lockup-x { font-family: var(--serif); font-size: clamp(22px, 2.8vw, 28px); line-height: 1; color: var(--rose); }
@@ -187,7 +189,7 @@
       <div class="logo-cell"><img src="https://res.cloudinary.com/klbhzj7u/image/upload/f_auto,q_auto/meandco/client-logos/client-lopez.png" alt="Lopez"></div>
       <div class="logo-cell"><img src="https://res.cloudinary.com/klbhzj7u/image/upload/f_auto,q_auto/meandco/client-logos/client-turner-crc.jpg" alt="Turner CRC"></div>
       <div class="logo-cell"><img src="https://res.cloudinary.com/klbhzj7u/image/upload/f_auto,q_auto/meandco/client-logos/client-ncrowd.png" alt="NCrowd"></div>
-      <div class="logo-cell"><img src="https://res.cloudinary.com/klbhzj7u/image/upload/f_auto,q_auto/meandco/client-logos/client-hello.png" alt="Hello"></div>
+      <div class="logo-cell"><img src="https://res.cloudinary.com/klbhzj7u/image/upload/f_auto,q_auto/meandco/client-logos/client-hello.png" alt="Harris Hoisting"></div>
       <div class="logo-cell"><img src="assets/client-nearshore.svg" alt="Nearshore"></div>
       <div class="logo-cell"><img src="https://res.cloudinary.com/klbhzj7u/image/upload/e_colorize:100,co_rgb:22315E/f_auto,q_auto/meandco/client-logos/ATR_Logo_White_kyzhrm.png" alt="ATR International"></div>
       <div class="logo-cell with-caption"><img src="assets/partners/lban.png" alt="Latino Business Action Network"><span class="logo-caption">with Stanford GSB</span></div>
@@ -211,7 +213,7 @@
 
       <div class="partner-card" data-reveal>
         <div class="lockup" role="img" aria-label="Me&amp;Co. and Mora Studios">
-          <img src="assets/logo-blue.png" alt="">
+          <img src="assets/logo-blue-tight.png" alt="">
           <span class="lockup-x" aria-hidden="true">&times;</span>
           <span class="lockup-mora" aria-hidden="true">Mora / Studios</span>
         </div>
