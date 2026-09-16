@@ -180,6 +180,32 @@
     renderCart();
   }
 
+  // Headline squiggles: match the width of the headline's longest line.
+  function matchSquiggleWidths() {
+    var svgs = document.querySelectorAll('svg[data-match-text]');
+    if (!svgs.length) return;
+    function size() {
+      svgs.forEach(function (svg) {
+        var h = svg.previousElementSibling;
+        if (!h) return;
+        var range = document.createRange();
+        range.selectNodeContents(h);
+        var rects = range.getClientRects(), lines = {}, widest = 0;
+        for (var i = 0; i < rects.length; i++) {
+          var r = rects[i], key = Math.round(r.top);
+          if (!lines[key]) lines[key] = { l: r.left, r: r.right };
+          lines[key].l = Math.min(lines[key].l, r.left);
+          lines[key].r = Math.max(lines[key].r, r.right);
+        }
+        for (var k in lines) widest = Math.max(widest, lines[k].r - lines[k].l);
+        if (widest > 0) svg.style.width = Math.round(widest) + 'px';
+      });
+    }
+    size();
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(size);
+    var t; window.addEventListener('resize', function () { clearTimeout(t); t = setTimeout(size, 100); });
+  }
+
   function initSquiggles() {
     var squiggles = document.querySelectorAll('.squiggle');
     if (!squiggles.length) return;
@@ -235,6 +261,7 @@
     initToolkitFilter();
     initCart();
     initParallax();
+    matchSquiggleWidths();
     initSquiggles();
   });
 })();
