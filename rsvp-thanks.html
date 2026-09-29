@@ -122,7 +122,7 @@
 /* After Stripe Checkout, confirm the payment on this page. */
 if (/[?&]paid=1/.test(location.search)) {
   var eb = document.querySelector(".eyebrow"); if (eb) eb.textContent = "Payment received";
-  var h = document.querySelector("h1"); if (h) h.textContent = "Your seat is booked.";
+  var h = document.querySelector("h1"); if (h) h.textContent = /[?&]e=coquito-conmigo/.test(location.search) ? "Gracias for giving." : "Your seat is booked.";
 }
 </script>
 </body>

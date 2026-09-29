@@ -3,6 +3,8 @@
    ------------------------------------------------------------
    GET  ?event=<slug>                  ->  { left, capacity, maxPerOrder }
    POST { event, name, email, seats }  ->  { url } of a Stripe Checkout page
+   POST { event, name, email, donation }  for a donation event: whole
+        dollars, between the event's minimum and maximum
 
    Price and capacity live here, never in the page, so nobody can
    change what they pay by editing the form. Seats taken = paid
@@ -22,6 +24,12 @@ const EVENTS = {
     capacity: 12,
     maxPerOrder: 4,
     page: '/events/event-one.html',
+  },
+  'coquito-conmigo': {
+    name: 'Coquito Conmigo donation',
+    description: 'Saturday 14 November 2026, 10:00 to 11:30 AM on Zoom. All proceeds go to Puerto Rico relief and recovery.',
+    donation: { min: 5, max: 1000 }, // whole dollars
+    page: '/events/event-two.html',
   },
 };
 
@@ -64,6 +72,7 @@ exports.handler = async (event) => {
     const slug = (event.queryStringParameters || {}).event;
     const item = EVENTS[slug];
     if (!item) return json(400, { error: 'Unknown event' });
+    if (item.donation) return json(200, { donation: item.donation });
     try {
       const left = Math.max(0, item.capacity - (await seatsTaken(key, slug)));
       return json(200, { left, capacity: item.capacity, maxPerOrder: item.maxPerOrder });
@@ -89,20 +98,30 @@ exports.handler = async (event) => {
   const name = String(input.name || '').trim().slice(0, 200);
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return json(400, { error: 'Please enter a valid email.' });
 
-  const seats = parseInt(input.seats, 10);
-  if (!(seats >= 1 && seats <= item.maxPerOrder)) {
-    return json(400, { error: `Choose between 1 and ${item.maxPerOrder} seats.` });
-  }
+  let seats = 1;
+  let amount = item.amount;
+  if (item.donation) {
+    const dollars = Number(input.donation);
+    if (!(Number.isInteger(dollars) && dollars >= item.donation.min && dollars <= item.donation.max)) {
+      return json(400, { error: `Please give a whole-dollar amount from $${item.donation.min} to $${item.donation.max}.` });
+    }
+    amount = dollars * 100;
+  } else {
+    seats = parseInt(input.seats, 10);
+    if (!(seats >= 1 && seats <= item.maxPerOrder)) {
+      return json(400, { error: `Choose between 1 and ${item.maxPerOrder} seats.` });
+    }
 
-  let left;
-  try {
-    left = item.capacity - (await seatsTaken(key, input.event));
-  } catch (e) {
-    console.error('Seat check failed', e.message);
-    return json(502, { error: 'Could not check seats. Please try again.' });
+    let left;
+    try {
+      left = item.capacity - (await seatsTaken(key, input.event));
+    } catch (e) {
+      console.error('Seat check failed', e.message);
+      return json(502, { error: 'Could not check seats. Please try again.' });
+    }
+    if (left <= 0) return json(409, { error: 'This series is sold out. Email melody@weareme.co to join the waitlist.', left: 0 });
+    if (seats > left) return json(409, { error: `Only ${left} seat${left === 1 ? '' : 's'} left.`, left });
   }
-  if (left <= 0) return json(409, { error: 'This series is sold out. Email melody@weareme.co to join the waitlist.', left: 0 });
-  if (seats > left) return json(409, { error: `Only ${left} seat${left === 1 ? '' : 's'} left.`, left });
 
   const origin = process.env.URL || `https://${event.headers.host}`;
   const form = new URLSearchParams({
@@ -111,7 +130,7 @@ exports.handler = async (event) => {
     expires_at: String(Math.floor(Date.now() / 1000) + HOLD_SECONDS),
     'line_items[0][quantity]': String(seats),
     'line_items[0][price_data][currency]': 'usd',
-    'line_items[0][price_data][unit_amount]': String(item.amount),
+    'line_items[0][price_data][unit_amount]': String(amount),
     'line_items[0][price_data][product_data][name]': item.name,
     'line_items[0][price_data][product_data][description]': item.description,
     'metadata[event]': input.event,
@@ -120,7 +139,7 @@ exports.handler = async (event) => {
     'payment_intent_data[metadata][event]': input.event,
     'payment_intent_data[metadata][name]': name,
     'payment_intent_data[metadata][seats]': String(seats),
-    success_url: `${origin}/rsvp-thanks.html?paid=1`,
+    success_url: `${origin}/rsvp-thanks.html?paid=1&e=${input.event}`,
     cancel_url: `${origin}${item.page}#rsvp`,
   });
 
