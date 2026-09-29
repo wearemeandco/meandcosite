@@ -237,6 +237,15 @@
               <option value="Sliding scale, please reach out">Sliding scale, please reach out</option>
             </select>
           </div>
+          <div class="field" id="rsvp-seats-field">
+            <label for="rsvp-seats">Seats <span id="rsvp-left" style="font-weight:500;text-transform:none;letter-spacing:0;color:#A79E92;"></span></label>
+            <select id="rsvp-seats" name="seats">
+              <option value="1">1 seat, $80</option>
+              <option value="2">2 seats, $160</option>
+              <option value="3">3 seats, $240</option>
+              <option value="4">4 seats, $320</option>
+            </select>
+          </div>
           <div class="field">
             <label for="rsvp-notes">Anything we should know? <span style="font-weight:500;text-transform:none;letter-spacing:0;color:#A79E92;">(optional)</span></label>
             <textarea id="rsvp-notes" name="notes" placeholder="Accessibility needs, dietary restrictions, or a question."></textarea>
@@ -289,34 +298,62 @@
 
 <script src="../script.js?v=5"></script>
 <script>
-/* Capital & Craft: the $80 rate records the RSVP, then opens Stripe Checkout.
+/* Capital & Craft: the $80 rate records the RSVP, then opens Stripe Checkout
+   for the number of seats chosen. Seats left come from the checkout function.
    The sliding-scale rate submits the request as before, with no payment. */
 (function () {
   var form = document.getElementById("rsvp-form");
   if (!form) return;
+  var API = "/.netlify/functions/event-checkout";
   var rate = form.querySelector("[name=ticket]");
+  var seatsField = document.getElementById("rsvp-seats-field");
+  var seats = document.getElementById("rsvp-seats");
   var btn = document.getElementById("rsvp-submit");
   var note = document.getElementById("rsvp-note");
+  var leftEl = document.getElementById("rsvp-left");
+  var PRICE = 80, left = null, soldOut = false;
   var paid = function () { return rate.value.indexOf("$80") === 0; };
   var sync = function () {
-    btn.textContent = paid() ? "Reserve and pay $80" : "Request the sliding scale";
+    var n = parseInt(seats.value, 10) || 1;
+    seatsField.style.display = paid() ? "" : "none";
+    if (paid() && soldOut) { btn.disabled = true; btn.textContent = "Sold out"; }
+    else { btn.disabled = false; btn.textContent = paid() ? "Reserve and pay $" + (PRICE * n) : "Request the sliding scale"; }
     note.style.display = paid() ? "" : "none";
   };
-  rate.addEventListener("change", sync); sync();
+  var showLeft = function (n, max) {
+    left = n; soldOut = n <= 0;
+    leftEl.textContent = soldOut ? "Sold out. Email melody@weareme.co to join the waitlist." : n + " of 12 seats left";
+    for (var i = 0; i < seats.options.length; i++) seats.options[i].disabled = parseInt(seats.options[i].value, 10) > Math.min(n, max || 4);
+    if (parseInt(seats.value, 10) > n && n > 0) seats.value = String(Math.min(n, 4));
+    sync();
+  };
+  fetch(API + "?event=" + encodeURIComponent(form.dataset.checkout))
+    .then(function (r) { return r.json(); })
+    .then(function (j) { if (typeof j.left === "number") showLeft(j.left, j.maxPerOrder); })
+    .catch(function () {});
+  rate.addEventListener("change", sync);
+  seats.addEventListener("change", sync);
+  sync();
   form.addEventListener("submit", function (e) {
     if (!paid()) return;
     e.preventDefault();
-    var label = btn.textContent; btn.disabled = true; btn.textContent = "Opening checkout…";
-    var fail = function (msg) { btn.disabled = false; btn.textContent = label; note.style.display = ""; note.style.color = "#B4462A"; note.textContent = msg || "Checkout could not start. Please try again or email melody@weareme.co."; };
+    if (soldOut) return;
+    var label = btn.textContent; btn.disabled = true; btn.textContent = "Opening checkout\u2026";
+    var fail = function (j) {
+      btn.disabled = false; btn.textContent = label;
+      note.style.display = ""; note.style.color = "#B4462A";
+      note.textContent = (j && j.error) || "Checkout could not start. Please try again or email melody@weareme.co.";
+      if (j && typeof j.left === "number") showLeft(j.left);
+    };
     var data = new FormData(form); data.append("payment", "Sent to Stripe checkout");
     fetch("/", { method: "POST", headers: { "Content-Type": "application/x-www-form-urlencoded" }, body: new URLSearchParams(data).toString() })
       .catch(function () {})
       .then(function () {
-        return fetch("/.netlify/functions/event-checkout", { method: "POST", headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ event: form.dataset.checkout, name: data.get("name"), email: data.get("email") }) });
+        return fetch(API, { method: "POST", headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ event: form.dataset.checkout, name: data.get("name"), email: data.get("email"), seats: seats.value }) });
       })
       .then(function (r) { return r.json(); })
-      .then(function (j) { if (j && j.url) { window.location.href = j.url; } else { fail(j && j.error); } })
+      .then(function (j) { if (j && j.url) { window.location.href = j.url; } else { fail(j); } })
       .catch(function () { fail(); });
   });
 })();
