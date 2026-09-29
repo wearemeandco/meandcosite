@@ -3,3 +3,7 @@
 
 # Local Claude Code settings
 .claude/settings.local.json
+
+# Secrets live in Netlify environment variables, never in the repo
+.env
+.env.*
