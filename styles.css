@@ -18,7 +18,10 @@
   --teal: #6FAFA0;
   --rose: #D9A5A0;
   --blue-text-on-dark: #D6E1F3;
-  --blue-text-on-dark-dim: #8FA3D4;
+  --blue-text-on-dark-dim: #C9D6F2;
+  /* Text on navy or blue: cream or light blue, never grey. */
+  --on-dark: #FFFCF5;
+  --on-dark-dim: #D6E1F3;
   --ink: #3A3630;
   --ink-soft: #5A544A;
 
