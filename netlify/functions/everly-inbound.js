@@ -1,5 +1,5 @@
 /* ============================================================
-   Me&Co. — wake Everly when mail reaches everly@admin.weareme.co
+   Me&Co.: wake Everly when mail reaches everly@admin.weareme.co
    ------------------------------------------------------------
    Resend sends an "email.received" webhook here. This checks the
    webhook signature, and if the sender is on Everly's instructor
