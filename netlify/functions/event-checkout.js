@@ -20,7 +20,7 @@ const EVENTS = {
   'capital-and-craft': {
     name: 'Capital & Craft, all three sessions',
     description: 'Founder funding readiness series with Melody Estrada and Dyasha Arauz. Wed 27 Jan, 10 Feb and 24 Feb 2027, 6:30 to 8:30 PM ET, Arauz Inc., Cutler Bay, Florida.',
-    amount: 8000, // cents, per seat
+    amount: 15000, // cents, per seat
     capacity: 12,
     maxPerOrder: 4,
     page: '/events/event-one.html',
