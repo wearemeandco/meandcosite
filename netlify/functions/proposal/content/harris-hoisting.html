@@ -1,0 +1,923 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Me&Co. · Proposal for Harris Hoisting</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#EFE8DC;
+    --card:#FFFCF5;
+    --blue:#2A4FBF;
+    --blue-dark:#1E3A94;
+    --navy:#22315E;
+    --navy-deep:#172654;
+    --brown:#7B4A2E;
+    --ink:#3A3630;
+    --body:#5A544A;
+    --soft-blue:#D6E1F3;
+    --mid-blue:#8FA3D4;
+    --panel:#F3ECDF;
+    --panel-2:#E6DCD0;
+    --coral:#E4572E;
+    --sage:#6FAFA0;
+    --rose:#D9A5A0;
+    --shadow:0 24px 60px -30px rgba(42,47,79,.35);
+    --shadow-sm:0 10px 30px -18px rgba(42,47,79,.4);
+  }
+
+  *{margin:0;padding:0;box-sizing:border-box}
+  html,body{background:var(--bg);color:var(--ink);}
+  body{
+    font-family:'DM Sans',Helvetica,Arial,sans-serif;
+    -webkit-font-smoothing:antialiased;
+    min-height:100vh;
+    line-height:1.55;
+  }
+  a{color:var(--blue);text-decoration:none}
+
+  /* ---------- Shell ---------- */
+  .shell{
+    max-width:820px;
+    margin:0 auto;
+    padding:26px 16px 40px;
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+  }
+
+  /* ---------- Top rail ---------- */
+  .rail{position:sticky;top:0;z-index:20;background:var(--bg);padding-bottom:12px;}
+  .rail-head{
+    display:flex;justify-content:space-between;align-items:center;
+    gap:10px;padding:6px 6px 12px;flex-wrap:wrap;
+  }
+  .wordmark{
+    font-family:'Fraunces',Georgia,serif;font-weight:600;font-size:20px;
+    color:var(--navy);letter-spacing:-.01em;
+  }
+  .wordmark span{color:var(--blue)}
+  /* Nav mark: real logo, matching the site header */
+  .wordmark-logo{display:block;height:clamp(26px,8vw,70px);width:auto;}
+  .rail-meta{
+    font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;
+    color:var(--brown);font-weight:600;
+  }
+
+  /* progress bar */
+  .progress-wrap{display:flex;align-items:center;gap:14px;padding:0 4px;}
+  .progress-track{
+    position:relative;flex:1;height:6px;border-radius:999px;
+    background:var(--panel-2);overflow:hidden;
+  }
+  .progress-fill{
+    position:absolute;inset:0 auto 0 0;height:100%;border-radius:999px;
+    background:linear-gradient(90deg,var(--blue),var(--mid-blue));
+    width:0%;transition:width .5s cubic-bezier(.4,0,.1,1);
+  }
+  .progress-count{
+    font-size:11px;letter-spacing:.12em;text-transform:uppercase;
+    color:var(--brown);font-weight:700;white-space:nowrap;
+    font-variant-numeric:tabular-nums;
+  }
+
+  /* step ticks */
+  .ticks{
+    display:flex;gap:6px;padding:12px 4px 2px;flex-wrap:wrap;
+  }
+  .tick{
+    appearance:none;border:none;cursor:pointer;background:transparent;
+    font-family:inherit;font-size:10.5px;letter-spacing:.06em;
+    text-transform:uppercase;font-weight:600;color:#9A8F7E;
+    padding:5px 10px;border-radius:999px;transition:all .25s ease;
+    display:flex;align-items:center;gap:6px;
+  }
+  .tick .dot{width:6px;height:6px;border-radius:50%;background:var(--panel-2);transition:background .25s ease}
+  .tick:hover{color:var(--brown)}
+  .tick.done .dot{background:var(--sage)}
+  .tick.active{background:var(--navy);color:var(--card)}
+  .tick.active .dot{background:var(--soft-blue)}
+
+  .step-title{
+    display:none;font-family:'Fraunces',Georgia,serif;font-weight:600;
+    font-size:15px;color:var(--navy);padding:12px 4px 2px;
+  }
+
+  @media(max-width:560px){
+    .rail-head{flex-direction:column;align-items:flex-start;gap:6px;padding:4px 6px 12px;}
+    .wordmark-logo{height:clamp(34px,13vw,58px);}
+    .rail-meta{font-size:9.5px;}
+    .ticks{display:none;}
+    .step-title{display:block;}
+  }
+
+  /* ---------- Deck ---------- */
+  .deck{flex:1;display:flex;flex-direction:column;margin-top:14px;}
+
+  .step{display:none;}
+  .step.is-active{display:block;animation:rise .55s cubic-bezier(.2,.7,.2,1);}
+  @keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+
+  .card{
+    background:var(--card);border-radius:20px;overflow:hidden;
+    box-shadow:var(--shadow);
+  }
+
+  .eyebrow{
+    font-size:11px;letter-spacing:.2em;text-transform:uppercase;
+    color:var(--brown);font-weight:700;
+  }
+  .eyebrow.on-dark{color:var(--mid-blue)}
+
+  .body-pad{padding:clamp(26px,5.5vw,48px) clamp(22px,5.5vw,48px);}
+
+  h1,h2,h3{font-family:'Fraunces',Georgia,serif;font-weight:600;color:var(--navy);text-wrap:balance;line-height:1.12;}
+  .lead{color:var(--body);font-size:16.5px;line-height:1.65;}
+  .lead strong{color:var(--ink);font-weight:600;}
+
+  .divider{height:1px;background:var(--panel-2);margin:28px 0;}
+
+  /* ---------- Cover (step 0) ---------- */
+  .cover-top{
+    background:var(--blue);
+    padding:clamp(30px,7vw,54px) clamp(24px,6vw,52px) clamp(26px,6vw,46px);
+    color:var(--card);position:relative;overflow:hidden;
+  }
+  .cover-top::after{
+    content:"";position:absolute;right:-90px;top:-90px;width:260px;height:260px;
+    border-radius:50%;background:radial-gradient(circle at center,rgba(255,252,245,.14),transparent 68%);
+  }
+  .cover-kicker{
+    font-size:11px;letter-spacing:.24em;text-transform:uppercase;
+    color:var(--soft-blue);font-weight:600;margin-bottom:18px;
+  }
+  .cover-title{
+    font-family:'Fraunces',Georgia,serif;font-weight:600;
+    font-size:clamp(30px,7.4vw,52px);line-height:1.06;color:var(--card);
+    text-wrap:balance;max-width:14ch;
+  }
+  .cover-sub{
+    margin-top:16px;font-size:15.5px;color:var(--soft-blue);max-width:46ch;line-height:1.6;
+  }
+  .cover-foot{
+    display:flex;gap:26px;flex-wrap:wrap;padding:22px clamp(24px,6vw,52px);
+    background:var(--navy-deep);color:var(--soft-blue);
+  }
+  .cover-foot .fl{display:flex;flex-direction:column;gap:3px;}
+  .cover-foot .k{font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--mid-blue);}
+  .cover-foot .v{font-size:14px;color:var(--card);font-weight:500;}
+
+  /* ---------- Snapshot table ---------- */
+  .snap{display:flex;flex-direction:column;gap:0;margin-top:6px;border-radius:14px;overflow:hidden;border:1px solid var(--panel-2);}
+  .snap-row{
+    display:grid;grid-template-columns:1.1fr 1fr 1.5fr;gap:14px;
+    padding:14px 18px;align-items:center;
+  }
+  .snap-row:not(:last-child){border-bottom:1px solid var(--panel-2);}
+  .snap-row.head{background:var(--panel);}
+  .snap-row.head span{font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--brown);font-weight:700;}
+  .snap-ch{font-weight:600;color:var(--ink);display:flex;align-items:center;gap:9px;}
+  .snap-ch .pip{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+  .snap-aud{font-variant-numeric:tabular-nums;color:var(--body);font-weight:500;}
+  .snap-note{color:var(--body);font-size:14px;}
+  @media(max-width:560px){
+    .snap-row{grid-template-columns:1fr;gap:4px;padding:14px 16px;}
+    .snap-row.head{display:none;}
+    .snap-aud{font-size:13px;color:var(--brown);}
+  }
+
+  /* ---------- Bullet lists ---------- */
+  .list{display:grid;gap:14px;margin-top:6px;}
+  .li{display:flex;gap:13px;align-items:baseline;}
+  .li .pip{width:8px;height:8px;border-radius:50%;flex-shrink:0;position:relative;top:1px;}
+  .li p{font-size:15.5px;line-height:1.55;color:var(--body);}
+  .li p b{color:var(--ink);font-weight:600;}
+
+  /* ---------- Objective / goal cards ---------- */
+  .goals{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:8px;}
+  .goal{
+    background:var(--panel);border-radius:14px;padding:20px 18px;
+    border:1px solid var(--panel-2);
+  }
+  .goal .num{font-family:'Fraunces',serif;font-size:26px;color:var(--blue);font-weight:600;line-height:1;}
+  .goal h3{font-size:17px;margin:12px 0 7px;color:var(--navy);}
+  .goal p{font-size:14px;color:var(--body);line-height:1.5;}
+  @media(max-width:680px){.goals{grid-template-columns:1fr;}}
+
+  /* ---------- Scope panels ---------- */
+  .scope{display:grid;gap:14px;margin-top:6px;}
+  .scope-item{
+    background:var(--panel);border-radius:14px;padding:20px 22px;border:1px solid var(--panel-2);
+    display:grid;grid-template-columns:auto 1fr;gap:18px;align-items:start;
+  }
+  .scope-tag{
+    font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;font-weight:700;
+    color:var(--card);background:var(--blue);padding:6px 11px;border-radius:999px;white-space:nowrap;
+    margin-top:2px;
+  }
+  .scope-tag.b{background:var(--brown)}
+  .scope-tag.c{background:var(--sage)}
+  .scope-item h3{font-size:16.5px;color:var(--navy);margin-bottom:6px;}
+  .scope-item p{font-size:14.5px;color:var(--body);line-height:1.55;}
+  .scope-item p em{color:var(--brown);font-style:normal;font-weight:600;}
+  @media(max-width:560px){.scope-item{grid-template-columns:1fr;gap:11px;}}
+
+  /* ---------- Deliverables ---------- */
+  .delivs{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:6px;}
+  .deliv{
+    display:flex;gap:12px;align-items:flex-start;background:var(--panel);
+    border:1px solid var(--panel-2);border-radius:12px;padding:16px 16px;
+  }
+  .deliv .mk{
+    width:26px;height:26px;border-radius:8px;background:var(--soft-blue);color:var(--blue-dark);
+    display:flex;align-items:center;justify-content:center;flex-shrink:0;font-weight:700;font-size:13px;
+    font-family:'Fraunces',serif;
+  }
+  .deliv p{font-size:14.5px;color:var(--ink);line-height:1.45;font-weight:500;}
+  @media(max-width:560px){.delivs{grid-template-columns:1fr;}}
+
+  /* ---------- Timeline ---------- */
+  .timeline{position:relative;margin-top:10px;padding-left:26px;}
+  .timeline::before{content:"";position:absolute;left:7px;top:8px;bottom:8px;width:2px;background:var(--panel-2);}
+  .phase{position:relative;padding:0 0 26px;}
+  .phase:last-child{padding-bottom:0;}
+  .phase::before{
+    content:"";position:absolute;left:-26px;top:3px;width:16px;height:16px;border-radius:50%;
+    background:var(--card);border:3px solid var(--blue);
+  }
+  .phase.mid::before{border-color:var(--brown);}
+  .phase.end::before{border-color:var(--sage);}
+  .phase .wk{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--brown);font-weight:700;}
+  .phase h3{font-size:17px;color:var(--navy);margin:5px 0 7px;}
+  .phase p{font-size:14.5px;color:var(--body);line-height:1.55;}
+
+  /* ---------- Fit / approach ---------- */
+  .fit-quote{
+    font-family:'Fraunces',serif;font-weight:500;font-size:clamp(21px,4vw,27px);
+    line-height:1.35;color:var(--navy);text-wrap:pretty;margin-bottom:26px;
+  }
+  .fit-quote em{color:var(--blue);font-style:italic;}
+  .fit-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:6px;}
+  .fit-card{background:var(--panel);border:1px solid var(--panel-2);border-radius:14px;padding:20px;}
+  .fit-card h3{font-size:16px;color:var(--navy);margin-bottom:7px;display:flex;align-items:center;gap:9px;}
+  .fit-card h3 .pip{width:8px;height:8px;border-radius:50%;}
+  .fit-card p{font-size:14px;color:var(--body);line-height:1.55;}
+  @media(max-width:560px){.fit-grid{grid-template-columns:1fr;}}
+
+  /* ---------- Pricing (final) ---------- */
+  .price-hero{
+    background:var(--navy-deep);color:var(--card);
+    padding:clamp(28px,6vw,46px) clamp(24px,6vw,48px) clamp(24px,5vw,38px);
+    position:relative;overflow:hidden;
+  }
+  .price-hero::after{
+    content:"";position:absolute;left:-70px;bottom:-90px;width:240px;height:240px;border-radius:50%;
+    background:radial-gradient(circle,rgba(143,163,212,.22),transparent 70%);
+  }
+  .inv-logo{
+    position:relative;display:block;height:clamp(40px,6.5vw,56px);width:auto;
+    margin-bottom:24px;
+  }
+  .price-hero h2{color:var(--card);font-size:clamp(24px,5vw,34px);position:relative;}
+  .price-hero p{color:var(--soft-blue);margin-top:12px;font-size:15px;max-width:52ch;line-height:1.6;position:relative;}
+  .pilot{
+    display:flex;gap:16px;align-items:center;margin-top:22px;position:relative;flex-wrap:wrap;
+    background:rgba(255,252,245,.07);border:1px solid rgba(214,225,243,.22);
+    padding:16px 20px;border-radius:14px;
+  }
+  .pilot .big{font-family:'Fraunces',serif;font-size:24px;color:var(--card);font-weight:600;line-height:1.1;}
+  .pilot .sm{font-size:13px;color:var(--soft-blue);line-height:1.5;flex:1;min-width:200px;}
+
+  /* Pilot options — horizontal rows, price pulled right and large */
+  .pilot-opts{margin-top:18px;display:grid;gap:8px;position:relative;}
+  .popt{
+    display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;
+    gap:6px 20px;padding:14px 18px;border-radius:12px;
+    background:rgba(255,252,245,.05);border:1px solid rgba(214,225,243,.18);
+  }
+  .popt-name{font-weight:700;font-size:14px;color:var(--card);letter-spacing:.01em;}
+  .popt-name em{
+    font-style:normal;margin-left:9px;font-size:10px;font-weight:700;
+    letter-spacing:.13em;text-transform:uppercase;
+    background:var(--card);color:var(--navy-deep);padding:4px 10px;border-radius:999px;
+    vertical-align:middle;
+  }
+  .popt-note{grid-column:1;font-size:12.5px;color:var(--soft-blue);line-height:1.45;}
+  .popt-amt{
+    grid-column:2;grid-row:1/span 2;align-self:center;text-align:right;
+    font-family:'Fraunces',serif;font-weight:600;font-size:clamp(22px,3vw,28px);
+    color:var(--card);line-height:1;white-space:nowrap;
+  }
+  .popt-amt span{font-family:inherit;font-size:13px;font-weight:400;color:var(--soft-blue);}
+  .popt-tot{display:block;margin-top:6px;font-family:"DM Sans",sans-serif;font-size:10.5px;font-weight:700;letter-spacing:.11em;text-transform:uppercase;color:var(--mid-blue);}
+  /* Selected state — reads as chosen, not merely suggested */
+  .popt.is-rec{
+    background:rgba(255,252,245,.14);border-color:var(--card);
+    box-shadow:inset 0 0 0 1px rgba(255,252,245,.35);
+  }
+  @media(max-width:560px){
+    .popt{grid-template-columns:1fr;}
+    .popt-amt{grid-column:1;grid-row:auto;text-align:left;margin-top:6px;}
+  }
+
+  /* Value stack — itemised rows so the $15,000 is legible */
+  .stack{
+    margin-top:20px;position:relative;padding:18px 20px;border-radius:12px;
+    background:rgba(255,252,245,.05);border:1px solid rgba(214,225,243,.18);
+  }
+  .stack-t{
+    font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;
+    font-weight:700;color:var(--soft-blue);margin-bottom:12px;
+  }
+  .srow{
+    display:flex;justify-content:space-between;align-items:baseline;gap:16px;
+    padding:7px 0;border-bottom:1px solid rgba(214,225,243,.14);
+    font-size:13.5px;color:var(--soft-blue);
+  }
+  .srow b{color:var(--card);font-weight:600;white-space:nowrap;}
+  .srow.is-total{
+    border-bottom:0;margin-top:4px;padding-top:12px;
+    border-top:1px solid rgba(214,225,243,.34);
+  }
+  .srow.is-total span{color:var(--card);font-weight:700;}
+  .srow.is-total b{font-family:'Fraunces',serif;font-size:20px;}
+
+  .tiers-intro{padding:clamp(24px,5vw,40px) clamp(22px,5.5vw,48px) 4px;}
+  .tiers-intro p{font-size:15px;color:var(--body);line-height:1.6;}
+
+  /* Horizontal rows: each option is a full-width band with the price pulled
+     out large on the right, so the number reads first. */
+  .tiers{
+    display:grid;grid-template-columns:1fr;gap:14px;
+    padding:20px clamp(22px,5.5vw,48px) clamp(28px,5vw,44px);
+  }
+  .tier{
+    border:1px solid var(--panel-2);border-radius:16px;padding:26px 26px;
+    background:var(--panel);position:relative;
+  }
+  .tier-price{
+    display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;
+    margin-top:10px;padding-top:14px;border-top:1px solid var(--panel-2);
+  }
+  .tier-price .amt{
+    font-family:'Fraunces',serif;font-weight:600;
+    font-size:clamp(26px,3.4vw,34px);line-height:1;color:var(--navy);
+    letter-spacing:-.01em;
+  }
+  .tier-price .per{
+    font-size:12px;font-weight:700;
+    letter-spacing:.12em;text-transform:uppercase;color:var(--brown);
+  }
+  .tier.featured .tier-price .amt{color:var(--blue);}
+  .tier.featured{
+    background:var(--card);border:2px solid var(--blue);box-shadow:var(--shadow-sm);
+  }
+  .tier .badge{
+    position:absolute;top:-11px;left:22px;background:var(--blue);color:var(--card);
+    font-size:10px;letter-spacing:.14em;text-transform:uppercase;font-weight:700;
+    padding:5px 12px;border-radius:999px;
+  }
+  .tier .opt{font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--brown);font-weight:700;}
+  .tier h3{font-family:'Fraunces',serif;font-size:20px;color:var(--navy);margin:8px 0 6px;line-height:1.15;}
+  .tier .who{font-size:13px;color:var(--body);line-height:1.5;}
+
+  /* Includes / Does-not-include — side by side so a dense tier reads at a glance
+     instead of scrolling through two long stacked lists. */
+  .tier-cols{
+    display:grid;grid-template-columns:1fr 1fr;gap:4px clamp(20px,4vw,32px);
+    margin-top:20px;
+  }
+  .tier-col.excl{border-left:1px solid var(--panel-2);padding-left:clamp(20px,4vw,32px);}
+  .tier-col .sublabel{
+    font-size:10px;letter-spacing:.12em;text-transform:uppercase;
+    color:var(--brown);font-weight:700;margin-bottom:11px;
+  }
+  .tier-col.excl .sublabel{color:#9A8F7E;}
+  .tier ul{list-style:none;margin:0;display:grid;gap:10px;}
+  .tier li{display:flex;gap:9px;font-size:13px;color:var(--ink);line-height:1.4;align-items:flex-start;}
+  .tier li::before{
+    content:"";flex-shrink:0;width:15px;height:15px;border-radius:50%;
+    margin-top:1px;background-repeat:no-repeat;background-position:center;background-size:8px 8px;
+    background-color:var(--sage);
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M3 8.5l3 3 7-7' stroke='white' stroke-width='2' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  }
+  .tier.featured .tier-col.incl li::before{background-color:var(--blue);}
+  .tier-col.excl li{color:var(--body);}
+  .tier-col.excl li::before{
+    background-color:var(--panel-2);
+    background-size:7px 7px;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M4 4l8 8M12 4l-8 8' stroke='%237B4A2E' stroke-width='1.6' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  }
+  @media(max-width:560px){
+    .tier-cols{grid-template-columns:1fr;gap:20px;}
+    .tier-col.excl{border-left:0;padding-left:0;padding-top:16px;border-top:1px solid var(--panel-2);}
+  }
+  .tier .notes{margin-top:18px;padding-top:14px;border-top:1px dashed var(--panel-2);font-size:12.5px;color:var(--body);line-height:1.55;}
+  .tier .notes b{display:block;font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--brown);font-weight:700;margin-bottom:5px;}
+  .after{
+    padding:clamp(26px,5vw,44px) clamp(22px,5.5vw,48px) clamp(20px,4vw,32px);
+  }
+  .after h3{font-size:clamp(20px,3.4vw,26px);margin:12px 0 14px;color:var(--navy);}
+  .after p{font-size:15.5px;line-height:1.65;color:var(--body);max-width:58ch;}
+  .after-note{
+    margin-top:16px;padding-top:16px;border-top:1px solid var(--panel-2);
+    font-size:13.5px;color:var(--brown);font-weight:600;
+  }
+  .close{
+    padding:8px clamp(22px,5.5vw,48px) clamp(30px,5vw,44px);
+  }
+  .close p{font-size:14.5px;color:var(--body);max-width:54ch;margin:0 0 20px;line-height:1.6;}
+  .cta{
+    display:inline-block;background:var(--blue);color:var(--card);font-size:14px;font-weight:700;
+    letter-spacing:.12em;text-transform:uppercase;padding:15px 34px;border-radius:999px;
+    transition:background .2s ease;
+  }
+  .cta:hover{background:var(--blue-dark);color:var(--card);}
+  .contact{margin-top:18px;font-size:12.5px;color:var(--brown);letter-spacing:.06em;}
+
+  /* ---------- Nav footer ---------- */
+  .nav{
+    display:flex;justify-content:space-between;align-items:center;gap:14px;
+    margin-top:20px;padding:0 4px;
+  }
+  .btn{
+    appearance:none;font-family:inherit;cursor:pointer;border:none;
+    font-size:12.5px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;
+    padding:13px 26px;border-radius:999px;transition:all .2s ease;
+  }
+  .btn-next{background:var(--navy);color:var(--card);}
+  .btn-next:hover{background:var(--navy-deep);}
+  .btn-back{background:transparent;color:var(--brown);padding-left:8px;}
+  .btn-back:hover{color:var(--navy);}
+  .btn-back[disabled]{opacity:0;pointer-events:none;}
+  .btn-next[disabled]{opacity:0;pointer-events:none;}
+
+  @media (prefers-reduced-motion:reduce){
+    .step.is-active{animation:none;}
+    .progress-fill{transition:none;}
+  }
+  :focus-visible{outline:3px solid var(--mid-blue);outline-offset:3px;border-radius:6px;}
+  /* ---------- Harris additions ---------- */
+  .goals.four{grid-template-columns:repeat(2,1fr);}
+  @media(max-width:680px){.goals.four{grid-template-columns:1fr;}}
+  .flow{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px;margin-top:8px;align-items:stretch;}
+  .fstep{background:var(--panel);border:1px solid var(--panel-2);border-radius:14px;padding:16px 14px;position:relative;}
+  .fstep .n{font-family:'Fraunces',serif;font-size:20px;color:var(--blue);font-weight:600;line-height:1;}
+  .fstep h3{font-size:15px;margin:10px 0 5px;}
+  .fstep p{font-size:12.5px;color:var(--body);line-height:1.45;}
+  .fstep.live{background:var(--blue);border-color:var(--blue);}
+  .fstep.live .n,.fstep.live h3{color:var(--card);}
+  .fstep.live p{color:var(--soft-blue);}
+  .loop-note{margin-top:12px;font-size:13px;color:var(--brown);font-weight:600;}
+  @media(max-width:680px){.flow{grid-template-columns:1fr;}}
+  .setup{
+    margin-top:20px;position:relative;padding:18px 20px;border-radius:12px;
+    background:rgba(255,252,245,.07);border:1px solid rgba(214,225,243,.22);
+    display:grid;grid-template-columns:minmax(0,1fr) auto;gap:6px 20px;align-items:center;
+  }
+  .setup .popt-amt{grid-row:1/span 2;}
+  @media(max-width:560px){.setup{grid-template-columns:1fr;}.setup .popt-amt{grid-row:auto;text-align:left;}}
+</style>
+</head>
+<body>
+<div class="shell">
+
+  <!-- ============ TOP RAIL ============ -->
+  <div class="rail">
+    <div class="rail-head">
+      <img src="/assets/logo-blue.png" alt="Me&amp;Co." class="wordmark-logo">
+      <div class="rail-meta">Proposal · October 2026</div>
+    </div>
+    <div class="progress-wrap">
+      <div class="progress-track"><div class="progress-fill" id="fill"></div></div>
+      <div class="progress-count" id="count">01 / 08</div>
+    </div>
+    <div class="step-title" id="stepTitle"></div>
+    <div class="ticks" id="ticks"></div>
+  </div>
+
+  <!-- ============ DECK ============ -->
+  <div class="deck" id="deck">
+
+    <!-- STEP 0 — COVER -->
+    <section class="step is-active" data-label="Cover">
+      <div class="card">
+        <div class="cover-top">
+          <div class="cover-kicker">Website Audit · Management · AI Editing</div>
+          <h1 class="cover-title">A website that keeps up with Harris Hoisting</h1>
+          <p class="cover-sub">Turning a one-page site into a sales tool general contractors can vet in one visit, and a simple way to keep it current by text.</p>
+        </div>
+        <div class="cover-foot">
+          <div class="fl"><span class="k">Prepared for</span><span class="v">Tana Harris · Harris Hoisting</span></div>
+          <div class="fl"><span class="k">Prepared by</span><span class="v">Melody Estrada, Me&amp;Co.</span></div>
+          <div class="fl"><span class="k">Engagement</span><span class="v">8-week setup, monthly management</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- STEP 1 — AUDIT -->
+    <section class="step" data-label="Audit">
+      <div class="card">
+        <div class="body-pad">
+          <div class="eyebrow">The opportunity</div>
+          <h2 style="font-size:clamp(23px,4.6vw,32px);margin:14px 0 16px;">The credentials are there. The website doesn't show them working.</h2>
+          <p class="lead">Harris Hoisting holds <strong>six-plus certifications</strong>, brings <strong>30+ years</strong> on large vertical builds, and works with partners like <strong>Swinerton, Cahill and Build Group</strong>. Today the site is a single Wix page with no current projects, no service detail, and nothing a procurement team can download.</p>
+
+          <div class="divider"></div>
+          <div class="eyebrow">Current snapshot · harrishoisting.com, October 2026</div>
+          <div class="snap" style="margin-top:14px;">
+            <div class="snap-row head"><span>Area</span><span>Status</span><span>What we found</span></div>
+            <div class="snap-row">
+              <div class="snap-ch"><span class="pip" style="background:var(--coral)"></span>Projects</div>
+              <div class="snap-aud">Missing</div>
+              <div class="snap-note">No project pages or photos; current work isn't shown</div>
+            </div>
+            <div class="snap-row">
+              <div class="snap-ch"><span class="pip" style="background:var(--coral)"></span>Procurement</div>
+              <div class="snap-aud">Missing</div>
+              <div class="snap-note">No downloadable capability statement</div>
+            </div>
+            <div class="snap-row">
+              <div class="snap-ch"><span class="pip" style="background:var(--rose)"></span>Certifications</div>
+              <div class="snap-aud">Inconsistent</div>
+              <div class="snap-note">Body lists 6, footer lists 9 different ones</div>
+            </div>
+            <div class="snap-row">
+              <div class="snap-ch"><span class="pip" style="background:var(--rose)"></span>Services</div>
+              <div class="snap-aud">Thin</div>
+              <div class="snap-note">7 services as a one-line list, no detail or request button</div>
+            </div>
+            <div class="snap-row">
+              <div class="snap-ch"><span class="pip" style="background:var(--mid-blue)"></span>Proof</div>
+              <div class="snap-aud">Underused</div>
+              <div class="snap-note">One testimonial; partner logo wall has repeats</div>
+            </div>
+            <div class="snap-row">
+              <div class="snap-ch"><span class="pip" style="background:var(--rose)"></span>SEO &amp; sharing</div>
+              <div class="snap-aud">Weak</div>
+              <div class="snap-note">Title reads "HOME", no real H1, no share image, default favicon</div>
+            </div>
+            <div class="snap-row">
+              <div class="snap-ch"><span class="pip" style="background:var(--rose)"></span>Accessibility</div>
+              <div class="snap-aud">Needs fixes</div>
+              <div class="snap-note">Mobile zoom disabled; most images lack alt text</div>
+            </div>
+            <div class="snap-row">
+              <div class="snap-ch"><span class="pip" style="background:var(--coral)"></span>People &amp; hiring</div>
+              <div class="snap-aud">Missing</div>
+              <div class="snap-note">No team, founder story or careers page</div>
+            </div>
+          </div>
+
+          <div class="divider"></div>
+          <div class="eyebrow">Where the upside is</div>
+          <div class="list" style="margin-top:16px;">
+            <div class="li"><span class="pip" style="background:var(--blue)"></span><p><b>Show current projects, within client rules.</b> Approved language only. For UCSF we post exactly what the client allows, and Tana signs off before anything goes live.</p></div>
+            <div class="li"><span class="pip" style="background:var(--brown)"></span><p><b>Add a capability statement.</b> One PDF with certifications, license #1016980, NAICS 238290, services and contacts. It's the first thing procurement asks for.</p></div>
+            <div class="li"><span class="pip" style="background:var(--sage)"></span><p><b>One verified certification list.</b> Used everywhere: the site, Procore, and agency vendor directories.</p></div>
+            <div class="li"><span class="pip" style="background:var(--coral)"></span><p><b>Tell the people story.</b> Tana as founder, the CityBuild and Helmets to Hardhats commitments, a Careers page for union operators, and a home for SFHEATA.</p></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- STEP 2 — GOALS -->
+    <section class="step" data-label="Goals">
+      <div class="card">
+        <div class="body-pad">
+          <div class="eyebrow">Objectives</div>
+          <h2 style="font-size:clamp(23px,4.6vw,32px);margin:14px 0 8px;">Four things we're here to move</h2>
+          <p class="lead" style="margin-bottom:26px;">Everything in this plan ladders up to these, and every monthly report measures against them.</p>
+          <div class="goals four">
+            <div class="goal">
+              <div class="num">01</div>
+              <h3>Stay relevant</h3>
+              <p>Keep the site current with projects and news, without Harris needing a full-time marketer.</p>
+            </div>
+            <div class="goal">
+              <div class="num">02</div>
+              <h3>Win more bids</h3>
+              <p>Give GCs and public agencies everything they need to qualify Harris in a single visit.</p>
+            </div>
+            <div class="goal">
+              <div class="num">03</div>
+              <h3>Protect client relationships</h3>
+              <p>Every project mention follows the client's approved wording, and nothing more.</p>
+            </div>
+            <div class="goal">
+              <div class="num">04</div>
+              <h3>Make updates effortless</h3>
+              <p>Tana texts an update, Me&amp;Co. reviews it, and it goes live.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- STEP 3 — AI SYSTEM -->
+    <section class="step" data-label="AI Editing">
+      <div class="card">
+        <div class="body-pad">
+          <div class="eyebrow">The AI editing system</div>
+          <h2 style="font-size:clamp(23px,4.6vw,32px);margin:14px 0 16px;">Update your site by text</h2>
+          <p class="lead" style="margin-bottom:24px;">It's the same setup we run on weareme.co. Harris sends an update in a text thread, an AI agent drafts the change, and <strong>nothing publishes without a human sign-off.</strong></p>
+          <div class="flow">
+            <div class="fstep"><div class="n">01</div><h3>Tana texts an update</h3><p>A photo, a project milestone or a quick note. No logins.</p></div>
+            <div class="fstep"><div class="n">02</div><h3>AI drafts the edit</h3><p>Written in the Harris voice, with a preview link.</p></div>
+            <div class="fstep"><div class="n">03</div><h3>Me&amp;Co. reviews</h3><p>Accuracy, tone, and the client's approved wording.</p></div>
+            <div class="fstep"><div class="n">04</div><h3>Tana approves</h3><p>A quick yes by text, or edits requested.</p></div>
+            <div class="fstep live"><div class="n">05</div><h3>Live on the site</h3><p>Saved in version history, easy to roll back.</p></div>
+          </div>
+          <p class="loop-note">Asked for changes? The agent revises and sends a new preview.</p>
+
+          <div class="divider"></div>
+          <div class="eyebrow">Built-in guardrails</div>
+          <div class="list" style="margin-top:16px;">
+            <div class="li"><span class="pip" style="background:var(--blue)"></span><p><b>Client rules cards.</b> Each project gets its own rules (for UCSF: only the language they approve, how Harris is credited, what can't be said). The agent can't go past them.</p></div>
+            <div class="li"><span class="pip" style="background:var(--brown)"></span><p><b>Two approvals.</b> Me&amp;Co. checks it first, then Tana approves the preview.</p></div>
+            <div class="li"><span class="pip" style="background:var(--sage)"></span><p><b>You own it.</b> Wix doesn't allow this kind of AI editing, so setup includes moving to a modern, fast platform. Harris keeps the domain and all content.</p></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- STEP 4 — SCOPE & DELIVERABLES -->
+    <section class="step" data-label="Deliverables">
+      <div class="card">
+        <div class="body-pad">
+          <div class="eyebrow">Scope of work</div>
+          <h2 style="font-size:clamp(23px,4.6vw,32px);margin:14px 0 20px;">What Harris gets</h2>
+          <div class="delivs">
+            <div class="deliv"><span class="mk">1</span><p>Full website audit report and content plan</p></div>
+            <div class="deliv"><span class="mk">2</span><p>Rebuilt site: Home, About, Services, Projects, Certifications, SFHEATA, Careers, Contact</p></div>
+            <div class="deliv"><span class="mk">3</span><p>Capability statement PDF, refreshed with every certification change</p></div>
+            <div class="deliv"><span class="mk">4</span><p>Text-to-site AI agent with the Harris brand and wording guide</p></div>
+            <div class="deliv"><span class="mk">5</span><p>Client rules cards for current projects, starting with UCSF</p></div>
+            <div class="deliv"><span class="mk">6</span><p>Technical SEO, accessibility fixes and Google Business Profile cleanup</p></div>
+            <div class="deliv"><span class="mk">7</span><p>Monthly report: what changed, traffic and form leads</p></div>
+            <div class="deliv"><span class="mk">8</span><p>A 30-minute training session for Tana's team</p></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- STEP 5 — TIMELINE -->
+    <section class="step" data-label="Timeline">
+      <div class="card">
+        <div class="body-pad">
+          <div class="eyebrow">Timeline &amp; process</div>
+          <h2 style="font-size:clamp(23px,4.6vw,32px);margin:14px 0 24px;">Live in about eight weeks</h2>
+          <div class="timeline">
+            <div class="phase">
+              <div class="wk">Weeks 1–2 · Audit &amp; content</div>
+              <h3>Get the facts right</h3>
+              <p>Verify certifications, gather project photos and approved language, write service copy, and set the brand and wording guide.</p>
+            </div>
+            <div class="phase mid">
+              <div class="wk">Weeks 3–6 · Build &amp; migrate</div>
+              <h3>The new site</h3>
+              <p>Design and build the site, move the domain off Wix, add the capability statement, and fix SEO and accessibility.</p>
+            </div>
+            <div class="phase mid">
+              <div class="wk">Weeks 7–8 · AI system &amp; launch</div>
+              <h3>Turn on updates by text</h3>
+              <p>Set up the text thread and agent, load the client rules, train Tana's team, and launch.</p>
+            </div>
+            <div class="phase end">
+              <div class="wk">Ongoing · Monthly</div>
+              <h3>Keep Harris relevant</h3>
+              <p>Updates by text, content batching for projects and SFHEATA, reporting, and a monthly check-in.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- STEP 6 — WHY ME&CO. -->
+    <section class="step" data-label="Why Me&Co.">
+      <div class="card">
+        <div class="body-pad">
+          <div class="eyebrow">Why Me&amp;Co.</div>
+          <p class="fit-quote" style="margin-top:16px;">We help founders keep <em>consistently high-performing content</em> in front of the right people, through strategy, design, and evolving technology.</p>
+          <div class="fit-grid">
+            <div class="fit-card">
+              <h3><span class="pip" style="background:var(--blue)"></span>We already know Harris</h3>
+              <p>We've worked alongside your team on content, so the voice, the partners and the projects aren't new to us.</p>
+            </div>
+            <div class="fit-card">
+              <h3><span class="pip" style="background:var(--brown)"></span>Careful with clients</h3>
+              <p>Approved language only. We follow what your clients allow and never add more.</p>
+            </div>
+            <div class="fit-card">
+              <h3><span class="pip" style="background:var(--sage)"></span>Not full time, still current</h3>
+              <p>Content batching and updates by text keep the site fresh without a full-time hire.</p>
+            </div>
+            <div class="fit-card">
+              <h3><span class="pip" style="background:var(--coral)"></span>Tech we use ourselves</h3>
+              <p>The AI editing system runs our own site. You get a setup that's already proven.</p>
+            </div>
+          </div>
+
+          <div class="divider"></div>
+          <div class="eyebrow">The first two weeks</div>
+          <p class="lead" style="margin-top:12px;">After a 45-minute kickoff, Tana sends three things: the current certification list, photos from active projects, and any client-approved language (UCSF first). Within two weeks you'll have the content plan, the sitemap and a first draft of the capability statement.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- STEP 7 — INVESTMENT (FINAL) -->
+    <section class="step" data-label="Investment">
+      <div class="card">
+        <div class="price-hero">
+          <img src="/assets/logo-cream-primary.png" alt="Me&amp;Co." class="inv-logo">
+          <div class="eyebrow on-dark" style="position:relative;">Investment &amp; next step</div>
+          <h2 style="margin-top:14px;">One setup, then a monthly plan</h2>
+          <p>Hosting is included in every plan, so Harris can cancel its Wix subscription after launch.</p>
+          <div class="setup">
+            <div class="popt-name">One-time setup</div>
+            <div class="popt-note">Audit, site rebuild and migration, capability statement, AI editing system, client rules cards and team training.</div>
+            <div class="popt-amt">$4,500</div>
+          </div>
+        </div>
+
+        <div class="tiers-intro">
+          <div class="eyebrow">Choose your monthly plan</div>
+          <p style="margin-top:12px;">Recommended: Growth. It keeps Harris visible to GCs between bids, with project features and content batching every month.</p>
+        </div>
+
+        <div class="tiers">
+          <div class="tier">
+            <div class="opt">Option 1</div>
+            <h3>Essentials</h3>
+            <div class="tier-price"><span class="amt">$450</span><span class="per">per month</span></div>
+            <p class="who">Keeping the site accurate, secure and up to date.</p>
+            <div class="tier-cols">
+              <div class="tier-col incl">
+                <div class="sublabel">Includes</div>
+                <ul>
+                  <li>Hosting, security and backups</li>
+                  <li>Up to 4 text updates per month</li>
+                  <li>Monthly report</li>
+                </ul>
+              </div>
+              <div class="tier-col excl">
+                <div class="sublabel">Does not include</div>
+                <ul class="excl">
+                  <li>Project features or new pages</li>
+                  <li>Content batching or social</li>
+                  <li>Capability statement refreshes</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <div class="tier featured">
+            <div class="badge">Recommended</div>
+            <div class="opt">Option 2</div>
+            <h3>Growth</h3>
+            <div class="tier-price"><span class="amt">$850</span><span class="per">per month</span></div>
+            <p class="who">Staying visible to general contractors and agencies between bids.</p>
+            <div class="tier-cols">
+              <div class="tier-col incl">
+                <div class="sublabel">Includes</div>
+                <ul>
+                  <li>Everything in Essentials</li>
+                  <li>Up to 10 text updates per month</li>
+                  <li>2 project features per month</li>
+                  <li>Content batching for site and LinkedIn</li>
+                  <li>SFHEATA cross-posts</li>
+                  <li>Quarterly capability statement refresh</li>
+                  <li>Monthly check-in</li>
+                </ul>
+              </div>
+              <div class="tier-col excl">
+                <div class="sublabel">Does not include</div>
+                <ul class="excl">
+                  <li>RFP or bid support pages</li>
+                  <li>Campaign landing pages</li>
+                  <li>Social content beyond LinkedIn shares</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <div class="tier">
+            <div class="opt">Option 3</div>
+            <h3>Partner</h3>
+            <div class="tier-price"><span class="amt">$1,500</span><span class="per">per month</span></div>
+            <p class="who">Active bidding seasons and big announcements.</p>
+            <div class="tier-cols">
+              <div class="tier-col incl">
+                <div class="sublabel">Includes</div>
+                <ul>
+                  <li>Everything in Growth</li>
+                  <li>Unlimited text updates</li>
+                  <li>RFP and bid support pages</li>
+                  <li>Campaign landing pages</li>
+                  <li>Social content support</li>
+                </ul>
+              </div>
+              <div class="tier-col excl">
+                <div class="sublabel">Does not include</div>
+                <ul class="excl">
+                  <li>Paid media buying</li>
+                  <li>Full social media management</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="after">
+          <div class="eyebrow">Terms</div>
+          <h3>Simple and flexible</h3>
+          <p>Plans are month to month after a 3-month minimum. Extra updates beyond your plan are $75 each.</p>
+          <p class="after-note">Harris owns the domain, the site and every piece of content.</p>
+        </div>
+
+        <div class="close">
+          <p>Ready when you are. The next step is a 45-minute kickoff, followed by your content plan and sitemap within two weeks.</p>
+          <a href="mailto:melody@weareme.co?subject=Harris%20Hoisting%20%C3%97%20Me%26Co.%3A%20Let's%20start&body=Hey%20Melody%2C%0A%0AWe%20would%20like%20to%20move%20forward%20with%20the%20setup%20and%20the%20%5Benter%20your%20plan%20here%5D%20plan.%0A%0AThank%20you!" class="cta">Let's get started</a>
+          <div class="contact">Me&amp;Co. · melody@weareme.co</div>
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <!-- ============ NAV ============ -->
+  <div class="nav">
+    <button class="btn btn-back" id="back" disabled>← Back</button>
+    <button class="btn btn-next" id="next">Next →</button>
+  </div>
+
+</div>
+
+<script>
+(function(){
+  var steps  = Array.prototype.slice.call(document.querySelectorAll('.step'));
+  var total  = steps.length;
+  var fill   = document.getElementById('fill');
+  var count  = document.getElementById('count');
+  var ticks  = document.getElementById('ticks');
+  var stepTitle = document.getElementById('stepTitle');
+  var back   = document.getElementById('back');
+  var next   = document.getElementById('next');
+  var deck   = document.getElementById('deck');
+  var i = 0;
+
+  function pad(n){ return (n<10?'0':'')+n; }
+
+  // build step ticks
+  steps.forEach(function(s, idx){
+    var b = document.createElement('button');
+    b.className = 'tick';
+    b.innerHTML = '<span class="dot"></span>' + s.getAttribute('data-label');
+    b.addEventListener('click', function(){ go(idx); });
+    ticks.appendChild(b);
+  });
+  var tickEls = Array.prototype.slice.call(ticks.children);
+
+  function go(n, skipScroll){
+    i = Math.max(0, Math.min(total-1, n));
+    steps.forEach(function(s, idx){ s.classList.toggle('is-active', idx===i); });
+
+    tickEls.forEach(function(t, idx){
+      t.classList.toggle('active', idx===i);
+      t.classList.toggle('done', idx < i);
+    });
+
+    var pct = total > 1 ? (i/(total-1))*100 : 100;
+    fill.style.width = pct + '%';
+    count.textContent = pad(i+1) + ' / ' + pad(total);
+    stepTitle.textContent = steps[i].getAttribute('data-label');
+
+    back.disabled = (i===0);
+    next.disabled = (i===total-1);
+    next.textContent = 'Next →';
+
+    if(!skipScroll){
+      window.scrollTo({top:0, behavior:'smooth'});
+    }
+  }
+
+  next.addEventListener('click', function(){
+    if(i===total-1) return;
+    go(i+1);
+  });
+  back.addEventListener('click', function(){ go(i-1); });
+
+  document.addEventListener('keydown', function(e){
+    if(e.target && /INPUT|TEXTAREA/.test(e.target.tagName)) return;
+    if(e.key==='ArrowRight') go(i+1);
+    if(e.key==='ArrowLeft') go(i-1);
+  });
+
+  go(0, true);
+})();
+</script>
+</body>
+</html>

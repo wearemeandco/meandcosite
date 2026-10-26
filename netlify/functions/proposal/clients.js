@@ -33,6 +33,15 @@ const CLIENTS = {
     kicker: 'Private proposal',
     blurb: 'This proposal was prepared just for you. Enter the password Melody sent along with the link.',
   },
+  'harris-hoisting': {
+    // -> reads process.env.PROPOSAL_PASSWORD_HARRIS
+    envKey: 'PROPOSAL_PASSWORD_HARRIS',
+    file: 'harris-hoisting.html',
+    // Shown on the lock screen only. Safe to be public.
+    name: 'Tana Harris & Harris Hoisting',
+    kicker: 'Private proposal',
+    blurb: 'This proposal was prepared just for you. Enter the password Melody sent along with the link.',
+  },
 };
 
 /** Env var naming convention: PROPOSAL_PASSWORD_<CLIENT>. */
