@@ -173,8 +173,8 @@
   /* ---------- Snapshot table ---------- */
   .snap{display:flex;flex-direction:column;gap:0;margin-top:6px;border-radius:14px;overflow:hidden;border:1px solid var(--panel-2);}
   .snap-row{
-    display:grid;grid-template-columns:1.1fr 1fr 1.5fr;gap:14px;
-    padding:14px 18px;align-items:center;
+    display:grid;grid-template-columns:0.9fr 1.5fr 1.5fr;gap:18px;
+    padding:16px 18px;align-items:start;
   }
   .snap-row:not(:last-child){border-bottom:1px solid var(--panel-2);}
   .snap-row.head{background:var(--panel);}
@@ -187,6 +187,10 @@
     .snap-row{grid-template-columns:1fr;gap:4px;padding:14px 16px;}
     .snap-row.head{display:none;}
     .snap-aud{font-size:13px;color:var(--brown);}
+    .snap-row:not(.head) .snap-note:nth-child(2)::before,
+    .snap-row:not(.head) .snap-note:nth-child(3)::before{display:block;font-size:10px;letter-spacing:.14em;text-transform:uppercase;font-weight:700;color:var(--brown);margin:8px 0 3px;}
+    .snap-row:not(.head) .snap-note:nth-child(2)::before{content:"What we found";}
+    .snap-row:not(.head) .snap-note:nth-child(3)::before{content:"How to fix it";}
   }
 
   /* ---------- Bullet lists ---------- */
@@ -537,63 +541,67 @@
     <section class="step" data-label="Audit">
       <div class="card">
         <div class="body-pad">
-          <div class="eyebrow">The opportunity</div>
-          <h2 style="font-size:clamp(23px,4.6vw,32px);margin:14px 0 16px;">The credentials are there. The website doesn't show them working.</h2>
-          <p class="lead">Harris Hoisting holds <strong>six-plus certifications</strong>, brings <strong>30+ years</strong> on large vertical builds, and works with partners like <strong>Swinerton, Cahill and Build Group</strong>. Today the site is a single Wix page with no current projects, no service detail, and nothing a procurement team can download.</p>
+          <div class="eyebrow">Website audit</div>
+          <h2 style="font-size:clamp(23px,4.6vw,32px);margin:14px 0 16px;">Harris has the experience. The website just isn’t showing it yet.</h2>
+          <p class="lead">Harris has <strong>30+ years</strong> on big construction projects, a long list of certifications, and partners like <strong>Swinerton, Cahill and Build Group</strong>. But when a contractor or city agency visits the website today, they see one page with no current projects and very little detail. Here’s what we found and how to fix it.</p>
 
           <div class="divider"></div>
-          <div class="eyebrow">Current snapshot · harrishoisting.com, October 2026</div>
+          <div class="eyebrow">What we found on harrishoisting.com · October 2026</div>
           <div class="snap" style="margin-top:14px;">
-            <div class="snap-row head"><span>Area</span><span>Status</span><span>What we found</span></div>
+            <div class="snap-row head"><span>Area</span><span>What we found</span><span>How to fix it</span></div>
             <div class="snap-row">
-              <div class="snap-ch"><span class="pip" style="background:var(--coral)"></span>Projects</div>
-              <div class="snap-aud">Missing</div>
-              <div class="snap-note">No project pages or photos; current work isn't shown</div>
+              <div class="snap-ch"><span class="pip" style="background:var(--coral)"></span>Current projects</div>
+              <div class="snap-note">Your current work isn’t on the site, so visitors can’t see what you’re working on now.</div>
+              <div class="snap-note">Add a Projects section with photos and a few lines on each job, using only the wording each client approves.</div>
             </div>
             <div class="snap-row">
-              <div class="snap-ch"><span class="pip" style="background:var(--coral)"></span>Procurement</div>
-              <div class="snap-aud">Missing</div>
-              <div class="snap-note">No downloadable capability statement</div>
+              <div class="snap-ch"><span class="pip" style="background:var(--coral)"></span>Company one-pager</div>
+              <div class="snap-note">There’s no one-page company summary to download. Contractors and city agencies usually ask for this first when choosing who to hire.</div>
+              <div class="snap-note">Create a one-page PDF (called a capability statement) with your certifications, license number, services and contact info, plus a download button on the site.</div>
             </div>
             <div class="snap-row">
-              <div class="snap-ch"><span class="pip" style="background:var(--rose)"></span>Certifications</div>
-              <div class="snap-aud">Inconsistent</div>
-              <div class="snap-note">Body lists 6, footer lists 9 different ones</div>
+              <div class="snap-ch"><span class="pip" style="background:var(--coral)"></span>Certifications</div>
+              <div class="snap-note">Your certifications are listed in two places on the site, and the two lists don’t match.</div>
+              <div class="snap-note">Confirm the correct list with you, then use that same list everywhere.</div>
             </div>
             <div class="snap-row">
               <div class="snap-ch"><span class="pip" style="background:var(--rose)"></span>Services</div>
-              <div class="snap-aud">Thin</div>
-              <div class="snap-note">7 services as a one-line list, no detail or request button</div>
+              <div class="snap-note">Your 7 services are listed one line each, with no explanation and no easy way to ask for a crew.</div>
+              <div class="snap-note">Give each service a short description and a “Request a crew” button.</div>
             </div>
             <div class="snap-row">
-              <div class="snap-ch"><span class="pip" style="background:var(--mid-blue)"></span>Proof</div>
-              <div class="snap-aud">Underused</div>
-              <div class="snap-note">One testimonial; partner logo wall has repeats</div>
+              <div class="snap-ch"><span class="pip" style="background:var(--rose)"></span>Client quotes &amp; partners</div>
+              <div class="snap-note">There’s only one client quote, and some partner logos show up more than once.</div>
+              <div class="snap-note">Add more quotes from happy clients and clean up the partner logos.</div>
             </div>
             <div class="snap-row">
-              <div class="snap-ch"><span class="pip" style="background:var(--rose)"></span>SEO &amp; sharing</div>
-              <div class="snap-aud">Weak</div>
-              <div class="snap-note">Title reads "HOME", no real H1, no share image, default favicon</div>
+              <div class="snap-ch"><span class="pip" style="background:var(--rose)"></span>Showing up on Google</div>
+              <div class="snap-note">When the site appears on Google, its title just says “HOME.” Links shared by text or on social media show no preview picture.</div>
+              <div class="snap-note">Give each page a clear title and short description, like “Harris Hoisting · Union hoist and crane operators in San Francisco,” and add a preview picture.</div>
             </div>
             <div class="snap-row">
-              <div class="snap-ch"><span class="pip" style="background:var(--rose)"></span>Accessibility</div>
-              <div class="snap-aud">Needs fixes</div>
-              <div class="snap-note">Mobile zoom disabled; most images lack alt text</div>
+              <div class="snap-ch"><span class="pip" style="background:var(--rose)"></span>Phones &amp; accessibility</div>
+              <div class="snap-note">On a phone, visitors can’t pinch to zoom in. Most images have no written description, which people using screen readers rely on and Google reads too.</div>
+              <div class="snap-note">Turn zoom back on and add a short description to every image.</div>
             </div>
             <div class="snap-row">
-              <div class="snap-ch"><span class="pip" style="background:var(--coral)"></span>People &amp; hiring</div>
-              <div class="snap-aud">Missing</div>
-              <div class="snap-note">No team, founder story or careers page</div>
+              <div class="snap-ch"><span class="pip" style="background:var(--coral)"></span>Team &amp; hiring</div>
+              <div class="snap-note">There’s nothing about Tana, the team, or how to come work for Harris.</div>
+              <div class="snap-note">Add an About section with Tana’s story, and a Careers page for union operators.</div>
+            </div>
+            <div class="snap-row">
+              <div class="snap-ch"><span class="pip" style="background:var(--mid-blue)"></span>Social media links</div>
+              <div class="snap-note">The “Connect” section at the bottom of the page is empty.</div>
+              <div class="snap-note">Link your LinkedIn (and Instagram, once it’s live) so visitors can follow along.</div>
             </div>
           </div>
 
           <div class="divider"></div>
-          <div class="eyebrow">Where the upside is</div>
+          <div class="eyebrow">If you fix only three things, fix these</div>
           <div class="list" style="margin-top:16px;">
-            <div class="li"><span class="pip" style="background:var(--blue)"></span><p><b>Show current projects, within client rules.</b> Approved language only. For UCSF we post exactly what the client allows, and Tana signs off before anything goes live.</p></div>
-            <div class="li"><span class="pip" style="background:var(--brown)"></span><p><b>Add a capability statement.</b> One PDF with certifications, license #1016980, NAICS 238290, services and contacts. It's the first thing procurement asks for.</p></div>
-            <div class="li"><span class="pip" style="background:var(--sage)"></span><p><b>One verified certification list.</b> Used everywhere: the site, Procore, and agency vendor directories.</p></div>
-            <div class="li"><span class="pip" style="background:var(--coral)"></span><p><b>Tell the people story.</b> Tana as founder, the CityBuild and Helmets to Hardhats commitments, a Careers page for union operators, and a home for SFHEATA.</p></div>
+            <div class="li"><span class="pip" style="background:var(--blue)"></span><p><b>1. Show what you’re working on now.</b> Current projects are the strongest proof Harris is busy and trusted. We only post what each client allows, and Tana signs off first.</p></div>
+            <div class="li"><span class="pip" style="background:var(--brown)"></span><p><b>2. Add the company one-pager.</b> It makes it easy for contractors and agencies to choose Harris and pass your info along.</p></div>
+            <div class="li"><span class="pip" style="background:var(--sage)"></span><p><b>3. Use one correct certification list.</b> Certifications help win work, so they need to match everywhere: the website, Procore and agency vendor lists.</p></div>
           </div>
         </div>
       </div>
