@@ -136,10 +136,11 @@ exports.handler = async (event) => {
     'metadata[event]': input.event,
     'metadata[name]': name,
     'metadata[seats]': String(seats),
+    'metadata[newsletter]': input.subscribe === false || input.subscribe === 'no' ? 'no' : 'yes',
     'payment_intent_data[metadata][event]': input.event,
     'payment_intent_data[metadata][name]': name,
     'payment_intent_data[metadata][seats]': String(seats),
-    success_url: `${origin}/rsvp-thanks.html?paid=1&e=${input.event}`,
+    success_url: `${origin}/rsvp-thanks.html?paid=1&e=${input.event}&session_id={CHECKOUT_SESSION_ID}`,
     cancel_url: `${origin}${item.page}#rsvp`,
   });
 
