@@ -353,7 +353,7 @@
       .catch(function () {})
       .then(function () {
         return fetch(API, { method: "POST", headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ event: form.dataset.checkout, name: data.get("name"), email: data.get("email"), seats: seats.value }) });
+          body: JSON.stringify({ event: form.dataset.checkout, name: data.get("name"), email: data.get("email"), seats: seats.value, subscribe: data.get("subscribe") === "yes" }) });
       })
       .then(function (r) { return r.json(); })
       .then(function (j) { if (j && j.url) { window.location.href = j.url; } else { fail(j); } })
