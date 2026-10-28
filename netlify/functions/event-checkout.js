@@ -27,7 +27,7 @@ const EVENTS = {
   },
   'coquito-conmigo': {
     name: 'Coquito Conmigo donation',
-    description: 'Saturday 14 November 2026, 10:00 to 11:30 AM on Zoom. All proceeds go to Puerto Rico relief and recovery.',
+    description: 'Saturday 14 November 2026, 10:00 to 11:30 AM on Zoom. All proceeds support a nonprofit in Puerto Rico.',
     donation: { min: 5, max: 1000 }, // whole dollars
     page: '/events/event-two.html',
   },
