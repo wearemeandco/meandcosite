@@ -480,6 +480,21 @@
   }
   .setup .popt-amt{grid-row:1/span 2;}
   @media(max-width:560px){.setup{grid-template-columns:1fr;}.setup .popt-amt{grid-row:auto;text-align:left;}}
+  .setup .was{display:block;font-size:15px;font-weight:400;color:var(--mid-blue);text-decoration:line-through;text-decoration-thickness:1.5px;margin-bottom:6px;}
+  .ff{
+    display:inline-block;margin-left:9px;font-size:10px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;
+    background:var(--card);color:var(--navy-deep);padding:4px 10px;border-radius:999px;vertical-align:middle;
+  }
+  .save{margin-top:10px;font-size:12.5px;color:var(--soft-blue);position:relative;}
+  .save b{color:var(--card);}
+  .ig-band{
+    margin-top:24px;background:var(--navy);color:var(--card);border-radius:14px;padding:20px 22px;
+    display:grid;grid-template-columns:minmax(0,1fr) auto;gap:14px 22px;align-items:center;
+  }
+  .ig-band p{font-size:14px;color:var(--soft-blue);line-height:1.55;}
+  .ig-band b{color:var(--card);}
+  .ig-band .tag{font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;font-weight:700;color:var(--mid-blue);white-space:nowrap;}
+  @media(max-width:560px){.ig-band{grid-template-columns:1fr;}}
 </style>
 </head>
 <body>
@@ -513,7 +528,7 @@
         <div class="cover-foot">
           <div class="fl"><span class="k">Prepared for</span><span class="v">Tana Harris · Harris Hoisting</span></div>
           <div class="fl"><span class="k">Prepared by</span><span class="v">Melody Estrada, Me&amp;Co.</span></div>
-          <div class="fl"><span class="k">Engagement</span><span class="v">8-week setup, monthly management</span></div>
+          <div class="fl"><span class="k">Engagement</span><span class="v">8-week setup, monthly management, Instagram kickoff</span></div>
         </div>
       </div>
     </section>
@@ -696,7 +711,41 @@
       </div>
     </section>
 
-    <!-- STEP 6 — WHY ME&CO. -->
+    <!-- STEP 6 — INSTAGRAM -->
+    <section class="step" data-label="Instagram">
+      <div class="card">
+        <div class="body-pad">
+          <div class="eyebrow">Recommended alongside the website</div>
+          <h2 style="font-size:clamp(23px,4.6vw,32px);margin:14px 0 16px;">Kick off Instagram at the same time</h2>
+          <p class="lead">Hoisting work is made for Instagram: cranes over the skyline, crews at work, operators who grew up in the trade. The new site gives GCs the facts. <strong>Instagram shows the work in motion</strong> and keeps Harris in front of the people who hire, refer and want to join.</p>
+
+          <div class="divider"></div>
+          <div class="eyebrow">Why launch now</div>
+          <div class="list" style="margin-top:16px;">
+            <div class="li"><span class="pip" style="background:var(--blue)"></span><p><b>One photo, two places.</b> The job-site photos Tana texts for the website can become Instagram posts too, so there's no extra work on your side.</p></div>
+            <div class="li"><span class="pip" style="background:var(--brown)"></span><p><b>Recruiting union operators.</b> Crew spotlights, CityBuild and Helmets to Hardhats stories reach the next generation of operators where they already are.</p></div>
+            <div class="li"><span class="pip" style="background:var(--sage)"></span><p><b>A home for SFHEATA.</b> Academy moments and graduate stories that Harris can share and repost across both brands.</p></div>
+            <div class="li"><span class="pip" style="background:var(--coral)"></span><p><b>Same guardrails.</b> Every project post follows the client's approved wording, UCSF included, and Tana signs off first.</p></div>
+          </div>
+
+          <div class="divider"></div>
+          <div class="eyebrow">What the kickoff includes</div>
+          <div class="delivs" style="margin-top:16px;">
+            <div class="deliv"><span class="mk">1</span><p>Profile setup or refresh: bio, highlights, links to the new site</p></div>
+            <div class="deliv"><span class="mk">2</span><p>Three content pillars: the work, the people, the community</p></div>
+            <div class="deliv"><span class="mk">3</span><p>A first 30-day content calendar</p></div>
+            <div class="deliv"><span class="mk">4</span><p>Launch timed with the new website going live</p></div>
+          </div>
+
+          <div class="ig-band">
+            <p><b>Instagram runs under your social media management, separate from this website investment.</b> We'll walk through the options together at kickoff.</p>
+            <span class="tag">Scoped separately</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- STEP 7 — WHY ME&CO. -->
     <section class="step" data-label="Why Me&Co.">
       <div class="card">
         <div class="body-pad">
@@ -737,10 +786,11 @@
           <h2 style="margin-top:14px;">One setup, then a monthly plan</h2>
           <p>Hosting is included in every plan, so Harris can cancel its Wix subscription after launch.</p>
           <div class="setup">
-            <div class="popt-name">One-time setup</div>
+            <div class="popt-name">One-time setup<span class="ff">Friends &amp; family rate</span></div>
             <div class="popt-note">Audit, site rebuild and migration, capability statement, AI editing system, client rules cards and team training.</div>
-            <div class="popt-amt">$4,500</div>
+            <div class="popt-amt"><span class="was" aria-label="Regular price $4,500">$4,500</span>$3,000</div>
           </div>
+          <p class="save">A thank-you for the years we've worked together: <b>$1,500 off</b> the standard setup.</p>
         </div>
 
         <div class="tiers-intro">
@@ -767,7 +817,7 @@
                 <div class="sublabel">Does not include</div>
                 <ul class="excl">
                   <li>Project features or new pages</li>
-                  <li>Content batching or social</li>
+                  <li>Content batching</li>
                   <li>Capability statement refreshes</li>
                 </ul>
               </div>
@@ -798,7 +848,7 @@
                 <ul class="excl">
                   <li>RFP or bid support pages</li>
                   <li>Campaign landing pages</li>
-                  <li>Social content beyond LinkedIn shares</li>
+                  <li>Social media management (scoped separately)</li>
                 </ul>
               </div>
             </div>
@@ -817,14 +867,14 @@
                   <li>Unlimited text updates</li>
                   <li>RFP and bid support pages</li>
                   <li>Campaign landing pages</li>
-                  <li>Social content support</li>
+                  <li>Site visuals sized and ready to share on social</li>
                 </ul>
               </div>
               <div class="tier-col excl">
                 <div class="sublabel">Does not include</div>
                 <ul class="excl">
                   <li>Paid media buying</li>
-                  <li>Full social media management</li>
+                  <li>Social media management (scoped separately)</li>
                 </ul>
               </div>
             </div>
@@ -839,8 +889,8 @@
         </div>
 
         <div class="close">
-          <p>Ready when you are. The next step is a 45-minute kickoff, followed by your content plan and sitemap within two weeks.</p>
-          <a href="mailto:melody@weareme.co?subject=Harris%20Hoisting%20%C3%97%20Me%26Co.%3A%20Let's%20start&body=Hey%20Melody%2C%0A%0AWe%20would%20like%20to%20move%20forward%20with%20the%20setup%20and%20the%20%5Benter%20your%20plan%20here%5D%20plan.%0A%0AThank%20you!" class="cta">Let's get started</a>
+          <p>Ready when you are. The next step is a 45-minute kickoff, where we also plan the Instagram launch. Your content plan and sitemap follow within two weeks.</p>
+          <a href="mailto:melody@weareme.co?subject=Harris%20Hoisting%20%C3%97%20Me%26Co.%3A%20Let's%20start&body=Hey%20Melody%2C%0A%0AWe%20would%20like%20to%20move%20forward%20with%20the%20website%20setup%20and%20the%20%5Benter%20your%20plan%20here%5D%20plan%2C%20and%20kick%20off%20Instagram.%0A%0AThank%20you!" class="cta">Let's get started</a>
           <div class="contact">Me&amp;Co. · melody@weareme.co</div>
         </div>
       </div>
