@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow, noarchive">
+<title>Harris Hoisting · A new look (concept)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&amp;family=Inter+Tight:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#F2EADF}
+a{color:#2A2A2C}a:hover{color:#B0125F}
+.hh *{box-sizing:border-box}
+.hh-face{position:absolute;backface-visibility:visible}
+@keyframes hhSpin{from{transform:rotateX(-14deg) rotateY(0deg)}to{transform:rotateX(-14deg) rotateY(360deg)}}
+@keyframes hhLift{0%{transform:translateY(400px)}100%{transform:translateY(30px)}}
+@keyframes hhTumble{from{transform:rotateX(0deg) rotateY(0deg)}to{transform:rotateX(360deg) rotateY(720deg)}}
+@keyframes hhFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-14px)}}
+@keyframes hhMarquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+.hh-anim .hh-tower{animation:hhSpin 22s linear infinite}
+.hh-anim .hh-car{animation:hhLift 6s cubic-bezier(.6,0,.3,1) infinite alternate}
+.hh-anim .hh-cube{animation:hhTumble 26s linear infinite}
+.hh-anim .hh-float{animation:hhFloat 6s ease-in-out infinite}
+.hh-anim .hh-track{animation:hhMarquee 38s linear infinite}
+.hh-card{transition:transform .5s cubic-bezier(.2,.7,.2,1),box-shadow .5s ease}
+.hh-card:hover{transform:rotateX(6deg) rotateY(-8deg) translateZ(18px);box-shadow:24px 30px 60px -30px rgba(42,42,44,.55)}
+.hh-btn{transition:transform .2s ease,background .2s ease}
+.hh-btn:hover{transform:translateY(-2px)}
+@media (prefers-reduced-motion: reduce){.hh *{animation:none !important;transition:none !important}}
+</style>
+</head>
+<body>
+<div style="background:#1E1E20;color:#F2EADF;font-family:'Inter Tight',Helvetica,Arial,sans-serif;font-size:13px;line-height:1.5;padding:12px 20px;text-align:center">A concept by Me&amp;Co. for Harris Hoisting. We'd bring in your logo, real job-site photos and final details. <a href="/proposals/harris-hoisting" style="color:#F33796;font-weight:600">Back to the proposal</a></div>
+<div class="hh hh-anim" style="width: 100%; background: #F2EADF; color: #2A2A2C; font-family: 'Inter Tight', Helvetica, Arial, sans-serif; overflow: hidden">
+
+  <!-- NAV -->
+  <header style="max-width: 1320px; margin: 0 auto; padding: 26px clamp(20px, 4vw, 48px); display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 18px">
+    <a href="#top" style="display: flex; align-items: center; gap: 12px; text-decoration: none; color: #2A2A2C">
+      <span aria-hidden="true" style="width: 40px; height: 40px; border-radius: 10px; background: #E0187F; color: #FFFFFF; display: flex; align-items: center; justify-content: center; font-family: 'Instrument Serif', Georgia, serif; font-size: 22px; font-style: italic">H</span>
+      <span style="font-weight: 700; font-size: 15px; letter-spacing: .22em; text-transform: uppercase">Harris Hoisting</span>
+    </a>
+    <nav aria-label="Main" style="display: flex; flex-wrap: wrap; align-items: center; gap: clamp(14px, 2.4vw, 34px); font-size: 14px; font-weight: 500">
+      <a href="#services" style="text-decoration: none">Services</a>
+      <a href="#projects" style="text-decoration: none">Projects</a>
+      <a href="#about" style="text-decoration: none">About</a>
+      <a href="#careers" style="text-decoration: none">Careers</a>
+      <a href="#contact" class="hh-btn" style="text-decoration: none; background: #2A2A2C; color: #F2EADF; padding: 13px 22px; border-radius: 999px; font-weight: 600; min-height: 44px; display: inline-flex; align-items: center">Request a crew</a>
+    </nav>
+  </header>
+
+  <!-- HERO -->
+  <section id="top" style="max-width: 1320px; margin: 0 auto; padding: clamp(20px, 4vw, 40px) clamp(20px, 4vw, 48px) clamp(40px, 6vw, 80px); display: flex; flex-wrap: wrap; align-items: center; gap: 40px">
+    <div style="flex: 1 1 560px; min-width: 0">
+      <p style="margin: 0 0 22px; font-size: 12px; font-weight: 700; letter-spacing: .26em; text-transform: uppercase; color: #B0125F">San Francisco Bay Area · Union operators</p>
+      <h1 style="margin: 0; font-family: 'Instrument Serif', Georgia, serif; font-weight: 400; font-size: clamp(56px, 8.4vw, 124px); line-height: .92; letter-spacing: -.02em; color: #2A2A2C">We lift the city <span style="font-style: italic; color: #E0187F">higher.</span></h1>
+      <p style="margin: 28px 0 0; max-width: 520px; font-size: 18px; line-height: 1.6; color: #55504A">Professional hoisting and lift services for large vertical construction. From the first inspection to the final lift, our operators keep crews moving, sites safe and schedules on track.</p>
+      <div style="display: flex; flex-wrap: wrap; gap: 14px; margin-top: 36px">
+        <a href="#contact" class="hh-btn" style="text-decoration: none; background: #E0187F; color: #FFFFFF; padding: 17px 30px; border-radius: 999px; font-weight: 600; font-size: 15px; min-height: 44px; display: inline-flex; align-items: center">Request a crew</a>
+        <a href="#capability" class="hh-btn" style="text-decoration: none; border: 1.5px solid #2A2A2C; color: #2A2A2C; padding: 16px 28px; border-radius: 999px; font-weight: 600; font-size: 15px; min-height: 44px; display: inline-flex; align-items: center">Download capability statement</a>
+      </div>
+      <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; margin-top: 54px; padding-top: 26px; border-top: 1px solid #D9CCBB; max-width: 560px">
+        <div><div style="font-family: 'Instrument Serif', Georgia, serif; font-size: 46px; line-height: 1">30+</div><div style="font-size: 13px; color: #55504A; margin-top: 6px">Years on vertical builds</div></div>
+        <div><div style="font-family: 'Instrument Serif', Georgia, serif; font-size: 46px; line-height: 1">9</div><div style="font-size: 13px; color: #55504A; margin-top: 6px">Certifications</div></div>
+        <div><div style="font-family: 'Instrument Serif', Georgia, serif; font-size: 46px; line-height: 1">7</div><div style="font-size: 13px; color: #55504A; margin-top: 6px">Lift services</div></div>
+      </div>
+    </div>
+
+    <!-- 3D HOIST TOWER -->
+    <div aria-hidden="true" style="flex: 1 1 420px; min-width: 0; display: flex; justify-content: center">
+      <div style="position: relative; width: min(460px, 100%); height: 640px; perspective: 1400px; perspective-origin: 50% 30%">
+        <div style="position: absolute; left: 50%; top: 52%; width: 380px; height: 380px; margin: -190px 0 0 -190px; border-radius: 50%; background: radial-gradient(circle, rgba(243,55,150,.22), rgba(243,55,150,0) 66%)"></div>
+        <div class="hh-tower" style="position: absolute; left: 50%; top: 30px; width: 120px; height: 560px; margin-left: -60px; transform-style: preserve-3d; transform: rotateX(-14deg) rotateY(30deg)">
+          <div class="hh-face" style="width: 120px; height: 560px; transform: translateZ(60px); border: 2px solid #E0187F; background-image: repeating-linear-gradient(45deg, transparent 0 34px, #E0187F 34px 36px), repeating-linear-gradient(-45deg, transparent 0 34px, #E0187F 34px 36px)"></div>
+          <div class="hh-face" style="width: 120px; height: 560px; transform: rotateY(90deg) translateZ(60px); border: 2px solid #E0187F; background-image: repeating-linear-gradient(45deg, transparent 0 34px, #E0187F 34px 36px), repeating-linear-gradient(-45deg, transparent 0 34px, #E0187F 34px 36px)"></div>
+          <div class="hh-face" style="width: 120px; height: 560px; transform: rotateY(180deg) translateZ(60px); border: 2px solid #E0187F; background-image: repeating-linear-gradient(45deg, transparent 0 34px, #E0187F 34px 36px), repeating-linear-gradient(-45deg, transparent 0 34px, #E0187F 34px 36px)"></div>
+          <div class="hh-face" style="width: 120px; height: 560px; transform: rotateY(270deg) translateZ(60px); border: 2px solid #E0187F; background-image: repeating-linear-gradient(45deg, transparent 0 34px, #E0187F 34px 36px), repeating-linear-gradient(-45deg, transparent 0 34px, #E0187F 34px 36px)"></div>
+          <div class="hh-face" style="width: 220px; height: 220px; left: -50px; top: 450px; transform: rotateX(90deg) translateZ(-110px); border: 2px solid #2A2A2C; border-radius: 50%"></div>
+          <div class="hh-car" style="position: absolute; left: -20px; top: 0; width: 160px; height: 110px; transform-style: preserve-3d">
+            <div class="hh-face" style="width: 160px; height: 110px; transform: translateZ(80px); background: #2A2A2C; border: 2px solid #E0187F; display: flex; align-items: center; justify-content: center; color: #F2EADF; font-family: 'Instrument Serif', Georgia, serif; font-style: italic; font-size: 38px">HH</div>
+            <div class="hh-face" style="width: 160px; height: 110px; transform: rotateY(90deg) translateZ(80px); background: #3A3A3D; border: 2px solid #E0187F"></div>
+            <div class="hh-face" style="width: 160px; height: 110px; transform: rotateY(180deg) translateZ(80px); background: #2A2A2C; border: 2px solid #E0187F"></div>
+            <div class="hh-face" style="width: 160px; height: 110px; transform: rotateY(270deg) translateZ(80px); background: #3A3A3D; border: 2px solid #E0187F"></div>
+            <div class="hh-face" style="width: 160px; height: 160px; top: -25px; transform: rotateX(90deg) translateZ(80px); background: #E0187F"></div>
+          </div>
+        </div>
+        <div style="position: absolute; left: 50%; bottom: 0; width: 260px; height: 28px; margin-left: -130px; border-radius: 50%; background: radial-gradient(ellipse, rgba(42,42,44,.28), rgba(42,42,44,0) 70%)"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CERTIFICATION MARQUEE -->
+  <section aria-label="Certifications" style="background: #2A2A2C; color: #F2EADF; padding: 22px 0; overflow: hidden">
+    <div class="hh-track" style="display: flex; width: max-content; gap: 46px; font-size: 14px; font-weight: 600; letter-spacing: .2em; text-transform: uppercase; white-space: nowrap">
+      <span>SDVOSB</span><span style="color: #F33796">✦</span><span>DVBE</span><span style="color: #F33796">✦</span><span>DBE</span><span style="color: #F33796">✦</span><span>WBE</span><span style="color: #F33796">✦</span><span>MBE</span><span style="color: #F33796">✦</span><span>WOSB</span><span style="color: #F33796">✦</span><span>LBE</span><span style="color: #F33796">✦</span><span>SB</span><span style="color: #F33796">✦</span><span>SB-PW</span><span style="color: #F33796">✦</span><span>License #1016980</span><span style="color: #F33796">✦</span><span>NAICS 238290</span><span style="color: #F33796">✦</span>
+      <span aria-hidden="true">SDVOSB</span><span aria-hidden="true" style="color: #F33796">✦</span><span aria-hidden="true">DVBE</span><span aria-hidden="true" style="color: #F33796">✦</span><span aria-hidden="true">DBE</span><span aria-hidden="true" style="color: #F33796">✦</span><span aria-hidden="true">WBE</span><span aria-hidden="true" style="color: #F33796">✦</span><span aria-hidden="true">MBE</span><span aria-hidden="true" style="color: #F33796">✦</span><span aria-hidden="true">WOSB</span><span aria-hidden="true" style="color: #F33796">✦</span><span aria-hidden="true">LBE</span><span aria-hidden="true" style="color: #F33796">✦</span><span aria-hidden="true">SB</span><span aria-hidden="true" style="color: #F33796">✦</span><span aria-hidden="true">SB-PW</span><span aria-hidden="true" style="color: #F33796">✦</span><span aria-hidden="true">License #1016980</span><span aria-hidden="true" style="color: #F33796">✦</span><span aria-hidden="true">NAICS 238290</span><span aria-hidden="true" style="color: #F33796">✦</span>
+    </div>
+  </section>
+
+  <!-- SERVICES -->
+  <section id="services" style="max-width: 1320px; margin: 0 auto; padding: clamp(70px, 9vw, 130px) clamp(20px, 4vw, 48px)">
+    <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 24px; margin-bottom: 54px">
+      <h2 style="margin: 0; font-family: 'Instrument Serif', Georgia, serif; font-weight: 400; font-size: clamp(44px, 5.6vw, 80px); line-height: .98; letter-spacing: -.015em; max-width: 720px">Every lift, <span style="font-style: italic; color: #B0125F">handled</span> by people who know the trade.</h2>
+      <p style="margin: 0; max-width: 380px; font-size: 16px; line-height: 1.6; color: #55504A">Skilled union operators and the equipment to match, for projects that go up fast and can't afford to stop.</p>
+    </div>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 18px; perspective: 1600px">
+      <article class="hh-card" style="background: #FBF7F1; border: 1px solid #E2D6C6; border-radius: 22px; padding: 30px; min-height: 250px; display: flex; flex-direction: column; justify-content: space-between">
+        <div style="font-family: 'Instrument Serif', Georgia, serif; font-size: 22px; color: #B0125F">01</div>
+        <div><h3 style="margin: 0 0 10px; font-size: 22px; font-weight: 600">Man-lift operators</h3><p style="margin: 0; font-size: 15px; line-height: 1.55; color: #55504A">Moving crews, personnel and site visitors up and down the build, safely and on schedule.</p></div>
+      </article>
+      <article class="hh-card" style="background: #FBF7F1; border: 1px solid #E2D6C6; border-radius: 22px; padding: 30px; min-height: 250px; display: flex; flex-direction: column; justify-content: space-between">
+        <div style="font-family: 'Instrument Serif', Georgia, serif; font-size: 22px; color: #B0125F">02</div>
+        <div><h3 style="margin: 0 0 10px; font-size: 22px; font-weight: 600">Material lift operators</h3><p style="margin: 0; font-size: 15px; line-height: 1.55; color: #55504A">Getting materials and equipment where they need to be, floor by floor.</p></div>
+      </article>
+      <article class="hh-card" style="background: #2A2A2C; color: #F2EADF; border-radius: 22px; padding: 30px; min-height: 250px; display: flex; flex-direction: column; justify-content: space-between">
+        <div style="font-family: 'Instrument Serif', Georgia, serif; font-size: 22px; color: #F33796">03</div>
+        <div><h3 style="margin: 0 0 10px; font-size: 22px; font-weight: 600">Elevator operators</h3><p style="margin: 0; font-size: 15px; line-height: 1.55; color: #D9CCBB">Professional operators for construction elevators on large vertical projects.</p></div>
+      </article>
+      <article class="hh-card" style="background: #FBF7F1; border: 1px solid #E2D6C6; border-radius: 22px; padding: 30px; min-height: 250px; display: flex; flex-direction: column; justify-content: space-between">
+        <div style="font-family: 'Instrument Serif', Georgia, serif; font-size: 22px; color: #B0125F">04</div>
+        <div><h3 style="margin: 0 0 10px; font-size: 22px; font-weight: 600">Crane operators</h3><p style="margin: 0; font-size: 15px; line-height: 1.55; color: #55504A">Certified operators for tower cranes and heavy equipment.</p></div>
+      </article>
+      <article class="hh-card" style="background: #E0187F; color: #FFFFFF; border-radius: 22px; padding: 30px; min-height: 250px; display: flex; flex-direction: column; justify-content: space-between">
+        <div style="font-family: 'Instrument Serif', Georgia, serif; font-size: 22px">05</div>
+        <div><h3 style="margin: 0 0 10px; font-size: 22px; font-weight: 600">Site stewardship</h3><p style="margin: 0; font-size: 15px; line-height: 1.55">Greeting and guiding everyone who steps onto the site, with safety first.</p></div>
+      </article>
+      <article class="hh-card" style="background: #FBF7F1; border: 1px solid #E2D6C6; border-radius: 22px; padding: 30px; min-height: 250px; display: flex; flex-direction: column; justify-content: space-between">
+        <div style="font-family: 'Instrument Serif', Georgia, serif; font-size: 22px; color: #B0125F">06</div>
+        <div><h3 style="margin: 0 0 10px; font-size: 22px; font-weight: 600">Project support and logistics</h3><p style="margin: 0; font-size: 15px; line-height: 1.55; color: #55504A">Planning lift operations around your schedule, from inspection to the final lift.</p></div>
+      </article>
+      <article class="hh-card" style="background: #FBF7F1; border: 1px solid #E2D6C6; border-radius: 22px; padding: 30px; min-height: 250px; display: flex; flex-direction: column; justify-content: space-between">
+        <div style="font-family: 'Instrument Serif', Georgia, serif; font-size: 22px; color: #B0125F">07</div>
+        <div><h3 style="margin: 0 0 10px; font-size: 22px; font-weight: 600">Equipment rental</h3><p style="margin: 0; font-size: 15px; line-height: 1.55; color: #55504A">Hoists and lift equipment for large-scale construction projects.</p></div>
+      </article>
+      <a href="#contact" class="hh-card" style="text-decoration: none; background: transparent; border: 1.5px dashed #2A2A2C; border-radius: 22px; padding: 30px; min-height: 250px; display: flex; flex-direction: column; justify-content: space-between; color: #2A2A2C">
+        <span style="font-family: 'Instrument Serif', Georgia, serif; font-size: 22px; font-style: italic">Need a crew?</span>
+        <span style="font-size: 22px; font-weight: 600">Tell us about your project →</span>
+      </a>
+    </div>
+  </section>
+
+  <!-- PROJECTS -->
+  <section id="projects" style="background: #E9DECF; padding: clamp(70px, 9vw, 130px) 0">
+    <div style="max-width: 1320px; margin: 0 auto; padding: 0 clamp(20px, 4vw, 48px)">
+      <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 24px; margin-bottom: 48px">
+        <h2 style="margin: 0; font-family: 'Instrument Serif', Georgia, serif; font-weight: 400; font-size: clamp(44px, 5.6vw, 80px); line-height: .98; letter-spacing: -.015em">On the skyline <span style="font-style: italic; color: #B0125F">now</span></h2>
+        <a href="#contact" style="font-size: 15px; font-weight: 600">See all projects →</a>
+      </div>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 22px">
+        <article style="display: flex; flex-direction: column; gap: 16px">
+          <div role="img" aria-label="Placeholder for a job-site photo" style="height: 400px; border-radius: 22px; background-color: #2A2A2C; background-image: repeating-linear-gradient(45deg, rgba(243,55,150,.0) 0 40px, rgba(243,55,150,.55) 40px 42px); display: flex; align-items: flex-end; padding: 22px; color: #F2EADF; font-size: 13px; letter-spacing: .14em; text-transform: uppercase">[Job-site photo]</div>
+          <div style="display: flex; justify-content: space-between; gap: 12px; font-size: 13px; letter-spacing: .14em; text-transform: uppercase; color: #6A635B"><span>[Client-approved name]</span><span>[Year]</span></div>
+          <h3 style="margin: 0; font-family: 'Instrument Serif', Georgia, serif; font-weight: 400; font-size: 32px">[Project name]</h3>
+        </article>
+        <article style="display: flex; flex-direction: column; gap: 16px">
+          <div role="img" aria-label="Placeholder for a job-site photo" style="height: 400px; border-radius: 22px; background-color: #E0187F; background-image: repeating-linear-gradient(-45deg, rgba(42,42,44,0) 0 40px, rgba(42,42,44,.35) 40px 42px); display: flex; align-items: flex-end; padding: 22px; color: #FFFFFF; font-size: 13px; letter-spacing: .14em; text-transform: uppercase">[Job-site photo]</div>
+          <div style="display: flex; justify-content: space-between; gap: 12px; font-size: 13px; letter-spacing: .14em; text-transform: uppercase; color: #6A635B"><span>[Client-approved name]</span><span>[Year]</span></div>
+          <h3 style="margin: 0; font-family: 'Instrument Serif', Georgia, serif; font-weight: 400; font-size: 32px">[Project name]</h3>
+        </article>
+        <article style="display: flex; flex-direction: column; gap: 16px">
+          <div role="img" aria-label="Placeholder for a job-site photo" style="height: 400px; border-radius: 22px; background-color: #FBF7F1; border: 1px solid #D9CCBB; background-image: repeating-linear-gradient(45deg, rgba(42,42,44,0) 0 40px, rgba(42,42,44,.18) 40px 42px); display: flex; align-items: flex-end; padding: 22px; color: #2A2A2C; font-size: 13px; letter-spacing: .14em; text-transform: uppercase">[Job-site photo]</div>
+          <div style="display: flex; justify-content: space-between; gap: 12px; font-size: 13px; letter-spacing: .14em; text-transform: uppercase; color: #6A635B"><span>[Client-approved name]</span><span>[Year]</span></div>
+          <h3 style="margin: 0; font-family: 'Instrument Serif', Georgia, serif; font-weight: 400; font-size: 32px">[Project name]</h3>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT / MISSION (dark, 3D cube) -->
+  <section id="about" style="background: #1E1E20; color: #F2EADF; padding: clamp(80px, 10vw, 150px) 0; position: relative">
+    <div style="max-width: 1320px; margin: 0 auto; padding: 0 clamp(20px, 4vw, 48px); display: flex; flex-wrap: wrap; align-items: center; gap: 60px">
+      <div aria-hidden="true" style="flex: 1 1 340px; min-width: 0; display: flex; justify-content: center">
+        <div class="hh-float" style="width: 300px; height: 300px; perspective: 1000px">
+          <div class="hh-cube" style="position: relative; width: 200px; height: 200px; margin: 50px; transform-style: preserve-3d; transform: rotateX(-24deg) rotateY(38deg)">
+            <div class="hh-face" style="width: 200px; height: 200px; transform: translateZ(100px); background: #E0187F; display: flex; align-items: center; justify-content: center; font-family: 'Instrument Serif', Georgia, serif; font-style: italic; font-size: 88px; color: #FFFFFF">H</div>
+            <div class="hh-face" style="width: 200px; height: 200px; transform: rotateY(90deg) translateZ(100px); background: #F2EADF"></div>
+            <div class="hh-face" style="width: 200px; height: 200px; transform: rotateY(180deg) translateZ(100px); background: #E0187F; display: flex; align-items: center; justify-content: center; font-family: 'Instrument Serif', Georgia, serif; font-style: italic; font-size: 88px; color: #FFFFFF">H</div>
+            <div class="hh-face" style="width: 200px; height: 200px; transform: rotateY(270deg) translateZ(100px); background: #F2EADF"></div>
+            <div class="hh-face" style="width: 200px; height: 200px; transform: rotateX(90deg) translateZ(100px); background: #3A3A3D; border: 2px solid #E0187F"></div>
+            <div class="hh-face" style="width: 200px; height: 200px; transform: rotateX(-90deg) translateZ(100px); background: #3A3A3D; border: 2px solid #E0187F"></div>
+          </div>
+        </div>
+      </div>
+      <div style="flex: 1 1 560px; min-width: 0">
+        <p style="margin: 0 0 22px; font-size: 12px; font-weight: 700; letter-spacing: .26em; text-transform: uppercase; color: #F33796">Our mission</p>
+        <h2 style="margin: 0; font-family: 'Instrument Serif', Georgia, serif; font-weight: 400; font-size: clamp(40px, 5vw, 70px); line-height: 1.02; letter-spacing: -.01em">Safety is the foundation. <span style="font-style: italic; color: #F33796">Everything else is built on it.</span></h2>
+        <p style="margin: 28px 0 0; max-width: 600px; font-size: 17px; line-height: 1.7; color: #D9CCBB">A certified service-disabled veteran-owned, woman-owned and minority-owned business. We build long-lasting relationships with our clients and our community by exceeding expectations on every project.</p>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; margin-top: 40px">
+          <div style="border: 1px solid #45454A; border-radius: 18px; padding: 24px"><h3 style="margin: 0 0 8px; font-size: 18px; font-weight: 600">Hiring local</h3><p style="margin: 0; font-size: 15px; line-height: 1.55; color: #D9CCBB">San Francisco residents through the City's CityBuild program.</p></div>
+          <div style="border: 1px solid #45454A; border-radius: 18px; padding: 24px"><h3 style="margin: 0 0 8px; font-size: 18px; font-weight: 600">Hiring veterans</h3><p style="margin: 0; font-size: 15px; line-height: 1.55; color: #D9CCBB">Fellow veterans through Helmets to Hardhats.</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TESTIMONIAL + PARTNERS -->
+  <section style="max-width: 1320px; margin: 0 auto; padding: clamp(80px, 10vw, 140px) clamp(20px, 4vw, 48px) clamp(60px, 7vw, 100px); text-align: center">
+    <blockquote style="margin: 0 auto; max-width: 980px">
+      <p style="margin: 0; font-family: 'Instrument Serif', Georgia, serif; font-size: clamp(32px, 4.2vw, 58px); line-height: 1.12; letter-spacing: -.01em">“Harris Hoisting definitely levels up the professionalism in the industry. They are <span style="font-style: italic; color: #B0125F">the heartbeat of the project.</span>”</p>
+      <footer style="margin-top: 26px; font-size: 13px; font-weight: 600; letter-spacing: .2em; text-transform: uppercase; color: #55504A">Mick Penn · Community Relations Liaison, Swinerton</footer>
+    </blockquote>
+    <div style="margin-top: 70px; padding-top: 40px; border-top: 1px solid #D9CCBB">
+      <p style="margin: 0 0 26px; font-size: 12px; font-weight: 700; letter-spacing: .26em; text-transform: uppercase; color: #6A635B">Trusted on site by</p>
+      <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 18px 48px; font-size: clamp(20px, 2.2vw, 28px); font-weight: 700; letter-spacing: .04em; color: #2A2A2C">
+        <span>Swinerton</span><span>Cahill</span><span>Build Group</span><span>Branagh</span><span>Anco</span><span>DCCI</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- SFHEATA + CAREERS -->
+  <section id="careers" style="max-width: 1320px; margin: 0 auto; padding: 0 clamp(20px, 4vw, 48px) clamp(80px, 9vw, 130px); display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 20px">
+    <div style="background: #E0187F; color: #FFFFFF; border-radius: 28px; padding: clamp(32px, 4vw, 56px); display: flex; flex-direction: column; justify-content: space-between; gap: 40px; min-height: 360px">
+      <p style="margin: 0; font-size: 12px; font-weight: 700; letter-spacing: .26em; text-transform: uppercase">Join the crew</p>
+      <div>
+        <h2 style="margin: 0 0 16px; font-family: 'Instrument Serif', Georgia, serif; font-weight: 400; font-size: clamp(38px, 4.4vw, 58px); line-height: 1">Build a career that goes up.</h2>
+        <p style="margin: 0 0 26px; font-size: 16px; line-height: 1.6; max-width: 440px">We're always looking for skilled union operators who take pride in safe, steady work.</p>
+        <a href="#contact" class="hh-btn" style="text-decoration: none; background: #2A2A2C; color: #F2EADF; padding: 16px 28px; border-radius: 999px; font-weight: 600; min-height: 44px; display: inline-flex; align-items: center">See open roles</a>
+      </div>
+    </div>
+    <div style="background: #2A2A2C; color: #F2EADF; border-radius: 28px; padding: clamp(32px, 4vw, 56px); display: flex; flex-direction: column; justify-content: space-between; gap: 40px; min-height: 360px">
+      <p style="margin: 0; font-size: 12px; font-weight: 700; letter-spacing: .26em; text-transform: uppercase; color: #F33796">Our sister company</p>
+      <div>
+        <h2 style="margin: 0 0 16px; font-family: 'Instrument Serif', Georgia, serif; font-weight: 400; font-size: clamp(38px, 4.4vw, 58px); line-height: 1">SF Heavy Equipment &amp; Trucking Academy</h2>
+        <p style="margin: 0 0 26px; font-size: 16px; line-height: 1.6; max-width: 440px; color: #D9CCBB">Training the next generation of operators in the Bay Area.</p>
+        <a href="#contact" class="hh-btn" style="text-decoration: none; border: 1.5px solid #F2EADF; color: #F2EADF; padding: 15px 28px; border-radius: 999px; font-weight: 600; min-height: 44px; display: inline-flex; align-items: center">Visit SFHEATA</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- CAPABILITY + CONTACT -->
+  <section id="contact" style="background: #E9DECF; padding: clamp(80px, 10vw, 140px) 0">
+    <div style="max-width: 1320px; margin: 0 auto; padding: 0 clamp(20px, 4vw, 48px); display: flex; flex-wrap: wrap; gap: 60px">
+      <div style="flex: 1 1 460px; min-width: 0">
+        <h2 style="margin: 0; font-family: 'Instrument Serif', Georgia, serif; font-weight: 400; font-size: clamp(52px, 6.6vw, 96px); line-height: .94; letter-spacing: -.02em">Let's get you <span style="font-style: italic; color: #B0125F">off the ground.</span></h2>
+        <div id="capability" style="margin-top: 40px; background: #FBF7F1; border: 1px solid #D9CCBB; border-radius: 22px; padding: 26px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 18px">
+          <div><h3 style="margin: 0 0 6px; font-size: 18px; font-weight: 600">Capability statement</h3><p style="margin: 0; font-size: 14px; color: #55504A">Certifications, license, NAICS and services in one PDF.</p></div>
+          <a href="#capability" class="hh-btn" style="text-decoration: none; background: #2A2A2C; color: #F2EADF; padding: 14px 24px; border-radius: 999px; font-weight: 600; font-size: 14px; min-height: 44px; display: inline-flex; align-items: center">Download PDF</a>
+        </div>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 24px; margin-top: 40px; font-size: 15px; line-height: 1.6">
+          <div><div style="font-size: 12px; font-weight: 700; letter-spacing: .2em; text-transform: uppercase; color: #6A635B; margin-bottom: 6px">Call</div><a href="tel:+14153354016" style="text-decoration: none">415.335.4016</a></div>
+          <div><div style="font-size: 12px; font-weight: 700; letter-spacing: .2em; text-transform: uppercase; color: #6A635B; margin-bottom: 6px">Email</div><a href="mailto:info@harrishoisting.com" style="text-decoration: none">info@harrishoisting.com</a></div>
+          <div><div style="font-size: 12px; font-weight: 700; letter-spacing: .2em; text-transform: uppercase; color: #6A635B; margin-bottom: 6px">Visit</div>1920 Ingalls St. #D<br>San Francisco, CA 94124</div>
+        </div>
+      </div>
+      <form style="flex: 1 1 420px; min-width: 0; background: #FBF7F1; border-radius: 28px; padding: clamp(28px, 3.6vw, 48px); display: flex; flex-direction: column; gap: 18px">
+        <h3 style="margin: 0 0 4px; font-size: 22px; font-weight: 600">Request a crew</h3>
+        <label style="display: flex; flex-direction: column; gap: 8px; font-size: 13px; font-weight: 600">Name<input type="text" name="name" style="font: inherit; font-weight: 400; font-size: 16px; padding: 14px 16px; border: 1px solid #CBBDAA; border-radius: 12px; background: #FFFFFF; color: #2A2A2C; min-height: 48px"></label>
+        <label style="display: flex; flex-direction: column; gap: 8px; font-size: 13px; font-weight: 600">Company<input type="text" name="company" style="font: inherit; font-weight: 400; font-size: 16px; padding: 14px 16px; border: 1px solid #CBBDAA; border-radius: 12px; background: #FFFFFF; color: #2A2A2C; min-height: 48px"></label>
+        <label style="display: flex; flex-direction: column; gap: 8px; font-size: 13px; font-weight: 600">Email<input type="email" name="email" style="font: inherit; font-weight: 400; font-size: 16px; padding: 14px 16px; border: 1px solid #CBBDAA; border-radius: 12px; background: #FFFFFF; color: #2A2A2C; min-height: 48px"></label>
+        <label style="display: flex; flex-direction: column; gap: 8px; font-size: 13px; font-weight: 600">Tell us about your project<textarea name="project" rows="4" style="font: inherit; font-weight: 400; font-size: 16px; padding: 14px 16px; border: 1px solid #CBBDAA; border-radius: 12px; background: #FFFFFF; color: #2A2A2C; resize: vertical"></textarea></label>
+        <button type="button" class="hh-btn" style="font: inherit; font-size: 15px; font-weight: 600; border: 0; cursor: pointer; background: #E0187F; color: #FFFFFF; padding: 17px 28px; border-radius: 999px; min-height: 48px; margin-top: 6px">Send request</button>
+      </form>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer style="background: #1E1E20; color: #D9CCBB; padding: 56px 0 40px">
+    <div style="max-width: 1320px; margin: 0 auto; padding: 0 clamp(20px, 4vw, 48px)">
+      <div style="font-family: 'Instrument Serif', Georgia, serif; font-size: clamp(64px, 12vw, 190px); line-height: .85; letter-spacing: -.03em; color: #F2EADF">Harris <span style="font-style: italic; color: #F33796">Hoisting</span></div>
+      <div style="display: flex; flex-wrap: wrap; justify-content: space-between; gap: 18px; margin-top: 40px; padding-top: 24px; border-top: 1px solid #45454A; font-size: 13px">
+        <span>Contractors License #1016980 · NAICS 238290</span>
+        <span>DVBE · DBE · LBE · WOSB · SDVOSB · WBE · MBE · SB · SB-PW</span>
+        <span>© 2026 Harris Hoisting</span>
+      </div>
+    </div>
+  </footer>
+
+</div>
+</body>
+</html>

@@ -42,6 +42,16 @@ const CLIENTS = {
     kicker: 'Private proposal',
     blurb: 'This proposal was prepared just for you. Enter the password Melody sent along with the link.',
   },
+  'harris-hoisting-preview': {
+    // Concept site that goes with the Harris proposal. Same password,
+    // and `session` shares the proposal's login so it opens straight away.
+    envKey: 'PROPOSAL_PASSWORD_HARRIS',
+    session: 'harris-hoisting',
+    file: 'harris-hoisting-preview.html',
+    name: 'Harris Hoisting · A new look',
+    kicker: 'Private preview',
+    blurb: 'A concept site prepared just for you. Enter the password Melody sent along with the link.',
+  },
 };
 
 /** Env var naming convention: PROPOSAL_PASSWORD_<CLIENT>. */

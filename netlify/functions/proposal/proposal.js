@@ -212,7 +212,10 @@ exports.handler = async function (event) {
   ).indexOf('https') !== -1;
 
   const password = process.env[client.envKey];
-  const name = cookieName(client.slug);
+  // A client entry may share another slug's session (e.g. a companion
+  // preview page), so one password unlocks both.
+  const sessionSlug = client.session || client.slug;
+  const name = cookieName(sessionSlug);
 
   if (!password) {
     // Misconfiguration — never fall open.
@@ -243,7 +246,7 @@ exports.handler = async function (event) {
       });
     }
 
-    const cookie = buildCookie(name, makeToken(client.slug, password), secure);
+    const cookie = buildCookie(name, makeToken(sessionSlug, password), secure);
 
     if (parsed.wantsJson) return json(200, { ok: true }, { 'Set-Cookie': cookie });
 
@@ -263,7 +266,7 @@ exports.handler = async function (event) {
   /* ----- page load ----- */
   const token = readCookie(event.headers, name);
 
-  if (verifyToken(token, client.slug, password)) {
+  if (verifyToken(token, sessionSlug, password)) {
     try {
       return html(200, loadProposal(client.file));
     } catch (err) {
