@@ -5,8 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Coquito Conmigo · Me&amp;Co. Events</title>
 <style>
-.coquito-photos { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; }
-.coquito-photos img { display: block; width: 100%; height: auto; border-radius: 20px; border: 1px solid var(--sand-line); }
+.coquito-photos { display: flex; gap: 16px; align-items: flex-start; }
+.coquito-photos img { display: block; min-width: 0; width: 100%; height: auto; border-radius: 20px; border: 1px solid var(--sand-line); }
+@media (max-width: 700px) { .coquito-photos { display: grid; grid-template-columns: 0.933fr 0.568fr; gap: 10px; } .coquito-photos img:first-child { grid-column: 1 / -1; } }
 @media (max-width: 480px) { .section-title > div { white-space: normal !important; } }
 </style>
 <meta name="description" content="Coquito Conmigo 2026: thank you for joining us. Donations to Friends of Puerto Rico's Metro Women's Business Center and Criar en Clave stay open until Giving Tuesday, December 1, and ALL money raised is donated.">
@@ -101,7 +102,9 @@
 <section style="background: var(--cream); padding: clamp(40px, 6vw, 64px) 0 0 0;">
   <div class="wrap">
     <div class="coquito-photos">
-      <img data-reveal src="../assets/coquito-2026-1.jpg" width="1400" height="845" loading="lazy" alt="Coquito Conmigo 2026 on Zoom: Eliana holds up a bottle of rum, Melody and a friend smile in front of a Puerto Rican flag, Thais raises a glass of coquito, and Alejandra smiles from her kitchen.">
+      <img data-reveal src="../assets/coquito-2026-1.jpg" width="1400" height="845" loading="lazy" style="flex: 1.657 1 0;" alt="Coquito Conmigo 2026 on Zoom: Eliana holds up a bottle of rum, Melody and a friend smile in front of a Puerto Rican flag, Thais raises a glass of coquito, and Alejandra smiles from her kitchen.">
+      <img data-reveal src="../assets/coquito-2026-2.jpg" width="1306" height="1400" loading="lazy" style="flex: 0.933 1 0;" alt="Melody in a red snowflake apron, mouth open in mock surprise, behind a counter of coconut rum, cans and a big pot, with the Puerto Rican flag and holiday lights behind her.">
+      <img data-reveal src="../assets/coquito-2026-3.jpg" width="795" height="1400" loading="lazy" style="flex: 0.568 1 0;" alt="Melody and a friend in Puerto Rico jerseys smile together in front of the Puerto Rican flag, next to the coquito pot.">
     </div>
   </div>
 </section>
