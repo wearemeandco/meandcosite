@@ -1,0 +1,68 @@
+/* ============================================================
+   Me&Co. newsletter issues on weareme.co (newsletter/issue-*.html).
+   Each issue is the email's own HTML inside <div class="nl-issue">.
+   These are the classes from the issues' <style> blocks, scoped to
+   .nl-issue so they style the email and nothing else on the page.
+   ============================================================ */
+
+.nl-wrap { background: var(--sand-light, #F3ECDF); padding: clamp(28px, 5vw, 56px) 16px clamp(40px, 6vw, 72px) 16px; }
+.nl-issue { max-width: 600px; margin: 0 auto; font-family: Arial, sans-serif; color: #3A3630; line-height: 1.5; overflow-wrap: break-word; }
+.nl-issue table { border-collapse: separate; border-spacing: 0; }
+.nl-issue td { vertical-align: top; }
+.nl-issue td[valign="middle"] { vertical-align: middle; }
+.nl-issue img { max-width: 100%; }
+.nl-issue a { -webkit-tap-highlight-color: transparent; }
+
+.nl-issue .s { padding: 22px 26px 4px 26px; }
+.nl-issue .p { margin: 0 0 12px 0; font-family: Arial, sans-serif; font-size: 14.5px; line-height: 1.6; color: #3A3630; }
+.nl-issue .tp { font-size: 14px !important; }
+.nl-issue .t { color: #22315E; }
+.nl-issue .m { color: #5A544A; font-size: 13.5px; }
+.nl-issue .a { color: #2A4FBF; font-weight: bold; text-decoration: underline; }
+.nl-issue .meco-h { font-family: Georgia, serif; font-weight: bold; font-size: 22px; color: #2A4FBF; white-space: nowrap; padding-right: 12px; vertical-align: middle; }
+.nl-issue .meco-squiggle { vertical-align: middle; }
+.nl-issue .sh { font-family: Georgia, serif; font-weight: bold; font-size: 22px; color: #2A4FBF; white-space: nowrap; padding-right: 12px; }
+.nl-issue .bx { border: 2px solid #E6DCD0; border-radius: 14px; padding: 16px 18px; margin-bottom: 12px; }
+.nl-issue .bt { font-family: Georgia, serif; font-weight: bold; font-size: 18px; color: #2A4FBF; margin-bottom: 5px; }
+.nl-issue .bd { margin: 0; font-family: Arial, sans-serif; font-size: 13.5px; line-height: 1.5; color: #5A544A; }
+.nl-issue .lp { background: #F3ECDF; color: #7B4A2E; font-family: Arial, sans-serif; font-size: 10px; font-weight: bold; letter-spacing: 0.14em; text-transform: uppercase; padding: 4px 10px; border-radius: 999px; white-space: nowrap; }
+.nl-issue .rp { background: #2A4FBF; color: #FFFCF5; font-family: Arial, sans-serif; font-size: 12px; font-weight: bold; padding: 4px 12px; border-radius: 999px; white-space: nowrap; }
+.nl-issue .oc { padding: 14px 12px 14px 0; }
+.nl-issue .oq { white-space: nowrap; padding: 14px 0; }
+.nl-issue .ot { font-family: Arial, sans-serif; font-size: 16px; font-weight: bold; color: #2A4FBF; margin-bottom: 3px; }
+.nl-issue .od { font-family: Arial, sans-serif; font-size: 14px; line-height: 1.5; color: #5A544A; }
+.nl-issue .btn { display: inline-block; background: #2A4FBF; color: #FFFCF5; font-family: Arial, sans-serif; font-size: 12px; font-weight: bold; letter-spacing: 0.1em; text-transform: uppercase; padding: 11px 26px; border-radius: 999px; text-decoration: none; }
+.nl-issue .btn:hover { background: #1E3A94; color: #FFFCF5; }
+.nl-issue .ey { font-family: Arial, sans-serif; font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: #7B4A2E; font-weight: bold; margin-bottom: 6px; }
+.nl-issue .kr { margin-bottom: 7px; }
+.nl-issue .lt { margin: 0 0 14px 0; font-family: Arial, sans-serif; font-size: 14px; line-height: 1.6; color: #D6E1F3; }
+.nl-issue .fl { color: #D6E1F3; text-decoration: none; }
+.nl-issue .or { border-top: 2px solid #E6DCD0; }
+.nl-issue .pw { margin-bottom: 9px; }
+.nl-issue .rl { color: #22315E; text-decoration: underline; }
+.nl-issue .src { color: #7B4A2E; }
+.nl-issue .sq { display: block; width: 100%; height: auto; border: 0; }
+.nl-issue .ci { display: block; width: 100%; height: auto; border: 0; border-radius: 10px; margin-bottom: 12px; }
+.nl-issue .ck-link { text-decoration: underline; }
+.nl-issue .op-pill { background: #2A4FBF; color: #FFFCF5; font-family: Arial, sans-serif; font-size: 12px; font-weight: bold; padding: 4px 12px; border-radius: 999px; white-space: nowrap; }
+.nl-issue .op-t { font-family: Arial, sans-serif; font-size: 16px; font-weight: bold; color: #2A4FBF; margin-bottom: 3px; }
+.nl-issue .op-d { font-family: Arial, sans-serif; font-size: 14px; line-height: 1.5; color: #5A544A; }
+.nl-issue .op-d a { color: #2A4FBF; font-weight: bold; text-decoration: underline; }
+
+/* Older issues built in Kit's own editor */
+.nl-issue .email-image img, .nl-issue figure img { height: auto; }
+.nl-issue figure { margin-left: auto; margin-right: auto; }
+.nl-issue .email-button { display: inline-block; }
+
+/* Phone: the email's own mobile rules */
+@media screen and (max-width: 480px) {
+  .nl-issue .meco-h, .nl-issue .sh { font-size: 17px !important; display: block !important; width: 100% !important; white-space: normal !important; padding-right: 0 !important; margin-bottom: 6px !important; }
+  .nl-issue .meco-squiggle { display: block !important; width: 100% !important; }
+  .nl-issue .lp, .nl-issue .rp, .nl-issue .meco-pill { font-size: 9px !important; padding: 3px 7px !important; }
+  .nl-issue .s { padding-left: 18px; padding-right: 18px; }
+}
+
+/* Subscribe card under each issue */
+.nl-sub { background: var(--cream, #FFFCF5); padding: clamp(48px, 7vw, 80px) 16px; }
+.nl-sub-card { max-width: 560px; margin: 0 auto; background: var(--sand, #EFE8DC); border: 1px solid var(--sand-line, #E6DCD0); border-radius: 22px; padding: clamp(26px, 4vw, 38px); }
+.nl-sub-card form { display: flex; flex-direction: column; gap: 16px; }
