@@ -104,7 +104,7 @@
     <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 18px;">
       <div data-reveal style="background: var(--sand-light); border-radius: 18px; padding: 30px;">
         <div class="font-serif" style="font-weight: 600; font-size: 21px; line-height: 1.2; color: var(--blue);">All three, one price</div>
-        <p style="margin: 10px 0 0 0; font-size: 14.5px; line-height: 1.6; color: var(--ink-soft);">$150 covers the whole series, with a sliding scale on request. Complete all three sessions and your attendee benefits unlock.</p>
+        <p style="margin: 10px 0 0 0; font-size: 14.5px; line-height: 1.6; color: var(--ink-soft);">$150 covers the whole series. Complete all three sessions and your attendee benefits unlock.</p>
       </div><div data-reveal style="background: var(--sand-light); border-radius: 18px; padding: 30px;">
         <div class="font-serif" style="font-weight: 600; font-size: 21px; line-height: 1.2; color: var(--blue);">A working series</div>
         <p style="margin: 10px 0 0 0; font-size: 14.5px; line-height: 1.6; color: var(--ink-soft);">Three in-person evenings in Cutler Bay, built around the paperwork, the numbers and the story your business runs on.</p>
@@ -220,7 +220,7 @@
     <div data-reveal style="position: relative; max-width: 560px; margin: 0 auto;">
       <div class="eyebrow-light" style="text-align: center;">RSVP</div>
       <div class="font-serif" style="margin-top: 14px; text-align: center; font-weight: 600; font-size: clamp(26px, 3.8vw, 40px); line-height: 1.12; color: var(--cream);">Reserve your seat.</div>
-      <p style="margin: 14px auto 28px auto; text-align: center; max-width: 420px; font-size: 16px; line-height: 1.65; color: var(--on-dark);">$150 for all three sessions, sliding scale on request. Ten to twelve seats, so registration is required.</p>
+      <p style="margin: 14px auto 28px auto; text-align: center; max-width: 420px; font-size: 16px; line-height: 1.65; color: var(--on-dark);">$150 for all three sessions. Ten to twelve seats, so registration is required.</p>
       <div style="background: var(--cream); border-radius: 22px; padding: clamp(24px, 4vw, 34px);">
         <form id="rsvp-form" data-checkout="capital-and-craft" name="event-rsvp" method="POST" data-netlify="true" netlify-honeypot="company" action="../rsvp-thanks.html" style="display: flex; flex-direction: column; gap: 16px;">
           <input type="hidden" name="form-name" value="event-rsvp">
@@ -244,7 +244,6 @@
             <label for="rsvp-ticket">Which rate</label>
             <select id="rsvp-ticket" name="ticket">
               <option value="$150, all three sessions">$150, all three sessions</option>
-              <option value="Sliding scale, please reach out">Sliding scale, please reach out</option>
             </select>
           </div>
           <div class="field" id="rsvp-seats-field">
@@ -309,8 +308,7 @@
 <script src="../script.js?v=5"></script>
 <script>
 /* Capital & Craft: the $150 rate records the RSVP, then opens Stripe Checkout
-   for the number of seats chosen. Seats left come from the checkout function.
-   The sliding-scale rate submits the request as before, with no payment. */
+   for the number of seats chosen. Seats left come from the checkout function. */
 (function () {
   var form = document.getElementById("rsvp-form");
   if (!form) return;
@@ -327,7 +325,7 @@
     var n = parseInt(seats.value, 10) || 1;
     seatsField.style.display = paid() ? "" : "none";
     if (paid() && soldOut) { btn.disabled = true; btn.textContent = "Sold out"; }
-    else { btn.disabled = false; btn.textContent = paid() ? "Reserve and pay $" + (PRICE * n) : "Request the sliding scale"; }
+    else { btn.disabled = false; btn.textContent = "Reserve and pay $" + (PRICE * n); }
     note.style.display = paid() ? "" : "none";
   };
   var showLeft = function (n, max) {
